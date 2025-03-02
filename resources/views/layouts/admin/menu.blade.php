@@ -41,7 +41,7 @@
                 <li class="menu-title" key="t-menu">Monitoring</li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('admin.user.index') }}" class="waves-effect">
                         <i class="bx bxs-user-rectangle"></i>
                         <span key="t-dashboards">User Management</span>
                     </a>
