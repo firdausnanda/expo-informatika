@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Techno Expo | Innovation Made Visible</title>
-    <meta name="author" content="vecuro">
+    <title>{{ env('APP_NAME') ?? 'Techno Expo' }}</title>
+    <meta name="author" content="Firdaus Nanda">
     <meta name="description" content="Techno Expo">
     <meta name="keywords" content="Techno Expo">
     <meta name="robots" content="INDEX,FOLLOW">
