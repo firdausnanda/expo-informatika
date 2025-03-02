@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('proyek', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_id')->constrained('m_kategori')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama');
             $table->string('slug')->unique();
             $table->string('deskripsi')->nullable();
-            $table->string('gambar')->nullable();
             $table->string('link')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');

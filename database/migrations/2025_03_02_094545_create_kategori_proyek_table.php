@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proyek_views', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('proyek_id')->constrained('proyek')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('ip_address');
-            $table->timestamps();
+        Schema::create('kategori_proyek', function (Blueprint $table) {
+            $table->foreignId('proyek_id')->constrained('proyek');
+            $table->foreignId('kategori_id')->constrained('m_kategori');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proyek_views');
+        Schema::dropIfExists('kategori_proyek');
     }
 };
