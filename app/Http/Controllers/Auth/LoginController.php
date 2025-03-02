@@ -42,13 +42,10 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        switch (Auth::user()->role) {
-            case RoleEnum::Admin:
-                return route('admin.dashboard');
-            case RoleEnum::User:
-                return route('index');
-            case RoleEnum::Dosen:
-                return route('index');
+        if (Auth::user()->roles[0]->name == 'admin') {
+            return route('admin.dashboard');
+        } else {
+            return route('index');
         }
     }
 }
