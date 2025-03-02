@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +22,10 @@ Route::get('/', [LandingController::class, 'index'])->name('index');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+  Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+  // Kategori
+  Route::resource('kategori', KategoriController::class)->except(['show', 'create', 'edit']);
+});

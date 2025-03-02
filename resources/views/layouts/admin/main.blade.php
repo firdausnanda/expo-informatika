@@ -6,8 +6,10 @@
     <meta charset="utf-8" />
     <title>{{ env('APP_NAME') ?? 'Techno Expo' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Admin Dashboard | Techno Expo" name="description" />
+    <meta content="Admin Dashboard | {{ env('APP_NAME') ?? 'Techno Expo' }}" name="description" />
     <meta content="Firdaus Nanda" name="author" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('admin/images/favicon.ico') }}">
 
@@ -19,7 +21,7 @@
     <link href="{{ asset('admin/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <!-- App js -->
     <script src="{{ asset('admin/js/plugin.js') }}"></script>
-
+    @stack('style')
 </head>
 
 <body data-sidebar="dark">
@@ -101,6 +103,14 @@
 
     <!-- App js -->
     <script src="{{ asset('admin/js/app.js') }}"></script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    @stack('scripts')
 </body>
 
 </html>

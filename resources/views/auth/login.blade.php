@@ -40,7 +40,7 @@
                                             name="email" id="email" value="{{ old('email') }}" placeholder="Email *"
                                             required autocomplete="off">
                                         @error('email')
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback text-start" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
@@ -50,7 +50,7 @@
                                             name="password" id="password"
                                             placeholder="Password *" required autocomplete="off">
                                         @error('password')
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback text-start" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
