@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('nim')->unique();
             $table->string('prodi');
             $table->string('angkatan')->nullable();
-            $table->string('email')->unique();
-            $table->string('no_hp')->nullable();
-            $table->string('alamat')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');

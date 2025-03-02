@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\MahasiswaController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,4 +29,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // Kategori
   Route::resource('kategori', KategoriController::class)->except(['show', 'create', 'edit']);
+
+  // Mahasiswa
+  Route::resource('mahasiswa', MahasiswaController::class)->except(['show', 'create', 'edit']);
 });

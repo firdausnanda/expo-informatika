@@ -23,7 +23,7 @@
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('admin.mahasiswa.index') }}" class="waves-effect">
                         <i class="bx bx-user-circle"></i>
                         <span key="t-dashboards">Mahasiswa</span>
                     </a>

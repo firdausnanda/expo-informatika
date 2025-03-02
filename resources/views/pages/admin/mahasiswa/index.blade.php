@@ -15,12 +15,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Kategori</h4>
+                        <h4 class="mb-sm-0 font-size-18">Mahasiswa</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Kategori</a></li>
-                                <li class="breadcrumb-item active">Data Kategori</li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Mahasiswa</a></li>
+                                <li class="breadcrumb-item active">Data Mahasiswa</li>
                             </ol>
                         </div>
 
@@ -34,17 +34,9 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <h4 class="card-title mb-4">Data Kategori</h4>
+                            <h4 class="card-title mb-4">Data Mahasiswa</h4>
 
-                            <table id="kategori-table" class="table table-bordered dt-responsive nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Kategori</th>
-                                        <th>Deskripsi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
+                            <table id="mahasiswa-table" class="table table-bordered dt-responsive nowrap w-100">
                             </table>
 
                         </div>
@@ -62,21 +54,35 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleId">
-                        Tambah Kategori
+                        Tambah Mahasiswa
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formTambah">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="nama" class="form-label">Nama Kategori</label>
+                            <label for="nama" class="form-label">Nama Mahasiswa</label>
                             <input type="text" class="form-control" id="nama" name="nama">
                             <div class="invalid-feedback" id="nama-error"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" cols="30" rows="5" id="deskripsi" name="deskripsi"></textarea>
-                            <div class="invalid-feedback" id="deskripsi-error"></div>
+                            <label for="nim" class="form-label">NIM</label>
+                            <input type="text" class="form-control" id="nim" name="nim">
+                            <div class="invalid-feedback" id="nim-error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prodi" class="form-label">Prodi</label>
+                            <select class="form-select" id="prodi" name="prodi">
+                                @foreach (App\Enums\ProdiEnum::cases() as $prodi)
+                                    <option value="{{ $prodi->value }}">{{ $prodi->value }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback" id="prodi-error"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="angkatan" class="form-label">Angkatan</label>
+                            <input type="text" class="form-control" id="angkatan" name="angkatan">
+                            <div class="invalid-feedback" id="angkatan-error"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -97,7 +103,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleId">
-                        Edit Kategori
+                        Edit Mahasiswa
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -105,16 +111,28 @@
                     <div class="modal-body">
                         <input type="hidden" id="id-edit" name="id">
                         <div class="mb-3">
-                            <label for="nama-edit" class="form-label">Nama Kategori</label>
+                            <label for="nama-edit" class="form-label">Nama Mahasiswa</label>
                             <input type="text" class="form-control" id="nama-edit" name="nama">
                             <div class="invalid-feedback" id="nama-edit-error"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="deskripsi-edit" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" cols="30" rows="5" id="deskripsi-edit" name="deskripsi"></textarea>
-                            <div class="invalid-feedback" id="deskripsi-edit-error"></div>
+                            <label for="nim-edit" class="form-label">NIM</label>
+                            <input type="text" class="form-control" id="nim-edit" name="nim">
+                            <div class="invalid-feedback" id="nim-edit-error"></div>
                         </div>
-                        </input>
+                        <div class="mb-3">
+                            <label for="prodi-edit" class="form-label">Prodi</label>
+                            <select class="form-select" id="prodi-edit" name="prodi">
+                                @foreach (App\Enums\ProdiEnum::cases() as $prodi)
+                                    <option value="{{ $prodi->value }}">{{ $prodi->value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="angkatan-edit" class="form-label">Angkatan</label>
+                            <input type="text" class="form-control" id="angkatan-edit" name="angkatan">
+                            <div class="invalid-feedback" id="angkatan-edit-error"></div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
@@ -136,12 +154,13 @@
         $(document).ready(function() {
 
             //  Init Datatable
-            $('#kategori-table').DataTable({
+            $('#mahasiswa-table').DataTable({
                 ordering: false,
                 processing: true,
                 lengthChange: false,
+                bDestroy: true,
                 ajax: {
-                    url: "{{ route('admin.kategori.index') }}",
+                    url: "{{ route('admin.mahasiswa.index') }}",
                     type: "GET",
                     dataType: "JSON",
                 },
@@ -162,31 +181,33 @@
                     }
                 }, {
                     targets: 1,
-                    title: 'Nama Kategori',
+                    title: 'Nama Mahasiswa',
                     width: '50%',
                     data: 'nama',
                     render: function(data, type, row, meta) {
-                        return `<span class="fw-bold">${data}</span><br><span class="text-secondary text-sm">${row.slug}</span>`;
+                        return `<span class="fw-bold">${data}</span><br>NIM. <span class="text-secondary text-sm">${row.nim}</span>`;
                     }
                 }, {
                     targets: 2,
-                    title: 'Deskripsi',
+                    title: 'Prodi',
                     width: '20%',
-                    data: 'deskripsi',
+                    data: 'prodi',
                     render: function(data, type, row, meta) {
-                        return data ? data : '-';
+                        let angkatan = row.angkatan ? row.angkatan : '-';
+                        return `${data} <br> <span class="text-secondary text-sm">${angkatan}</span>`;
                     }
                 }, {
                     targets: 3,
                     className: 'text-center',
+                    title: 'Aksi',
                     width: '15%',
                     render: function(data, type, row, meta) {
                         return `<button class="btn btn-sm btn-primary btn-edit"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>`;
                     }
                 }],
                 initComplete: function() {
-                    $('#kategori-table').DataTable().buttons().container().appendTo(
-                        '#kategori-table_wrapper .col-md-6:eq(0)');
+                    $('#mahasiswa-table').DataTable().buttons().container().appendTo(
+                        '#mahasiswa-table_wrapper .col-md-6:eq(0)');
                     $('.btn-tambah').removeClass("btn-secondary");
                 }
             });
@@ -195,31 +216,31 @@
             $('#formTambah').submit(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: "{{ route('admin.kategori.store') }}",
+                    url: "{{ route('admin.mahasiswa.store') }}",
                     type: "POST",
                     data: $(this).serialize(),
                     dataType: "JSON",
                     beforeSend: function() {
                         Swal.fire({
                             title: 'Mohon tunggu',
-                            text: 'Kategori sedang dimuat',
+                            text: 'Mahasiswa sedang dimuat',
                             icon: 'warning'
                         });
                     },
                     success: function(response) {
                         $('#modalTambah').modal('hide');
-                        $('#kategori-table').DataTable().ajax.reload();
+                        $('#mahasiswa-table').DataTable().ajax.reload();
                         $('#formTambah')[0].reset();
                         Swal.fire({
                             title: 'Berhasil',
-                            text: 'Kategori berhasil ditambahkan',
+                            text: 'Mahasiswa berhasil ditambahkan',
                             icon: 'success'
                         });
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({
                             title: 'Gagal',
-                            text: 'Kategori gagal ditambahkan',
+                            text: 'Mahasiswa gagal ditambahkan',
                             icon: 'error'
                         });
                         $.each(xhr.responseJSON.errors, function(key, value) {
@@ -232,11 +253,13 @@
             });
 
             // Modal Edit Show
-            $('#kategori-table').on('click', '.btn-edit', function() {
-                let data = $('#kategori-table').DataTable().row($(this).parents('tr')).data();
+            $('#mahasiswa-table').on('click', '.btn-edit', function() {
+                let data = $('#mahasiswa-table').DataTable().row($(this).parents('tr')).data();
                 $('#id-edit').val(data.id);
                 $('#nama-edit').val(data.nama);
-                $('#deskripsi-edit').val(data.deskripsi);
+                $('#nim-edit').val(data.nim);
+                $('#prodi-edit').val(data.prodi);
+                $('#angkatan-edit').val(data.angkatan);
                 $('#modalEdit').modal('show');
             });
 
@@ -244,7 +267,7 @@
             $('#formEdit').submit(function(e) {
                 e.preventDefault();
 
-                let link = "{{ route('admin.kategori.update', ':id') }}";
+                let link = "{{ route('admin.mahasiswa.update', ':id') }}";
                 link = link.replace(':id', $('#id-edit').val());
 
                 $.ajax({
@@ -255,23 +278,23 @@
                     beforeSend: function() {
                         Swal.fire({
                             title: 'Mohon tunggu',
-                            text: 'Kategori sedang dimuat',
+                            text: 'Mahasiswa sedang dimuat',
                             icon: 'warning'
                         });
                     },
                     success: function(response) {
                         $('#modalEdit').modal('hide');
-                        $('#kategori-table').DataTable().ajax.reload();
+                        $('#mahasiswa-table').DataTable().ajax.reload();
                         Swal.fire({
                             title: 'Berhasil',
-                            text: 'Kategori berhasil diubah',
+                            text: 'Mahasiswa berhasil diubah',
                             icon: 'success'
                         });
                     },
                     error: function(xhr, status, error) {
                         Swal.fire({
                             title: 'Gagal',
-                            text: 'Kategori gagal diubah',
+                            text: 'Mahasiswa gagal diubah',
                             icon: 'error'
                         });
                         $.each(xhr.responseJSON.errors, function(key, value) {
@@ -284,16 +307,16 @@
                 });
             });
 
-            //  Delete Kategori
-            $('#kategori-table').on('click', '.btn-delete', function() {
-                let data = $('#kategori-table').DataTable().row($(this).parents('tr')).data();
+            //  Delete Mahasiswa
+            $('#mahasiswa-table').on('click', '.btn-delete', function() {
+                let data = $('#mahasiswa-table').DataTable().row($(this).parents('tr')).data();
 
-                let link = "{{ route('admin.kategori.destroy', ':id') }}";
+                let link = "{{ route('admin.mahasiswa.destroy', ':id') }}";
                 link = link.replace(':id', data.id);
 
                 Swal.fire({
                     title: 'Apakah anda yakin?',
-                    text: 'Data kategori akan dihapus',
+                    text: 'Data mahasiswa akan dihapus',
                     icon: 'error',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -309,22 +332,22 @@
                             beforeSend: function() {
                                 Swal.fire({
                                     title: 'Mohon tunggu',
-                                    text: 'Kategori sedang dimuat',
+                                    text: 'Mahasiswa sedang dimuat',
                                     icon: 'warning'
                                 });
                             },
                             success: function(response) {
-                                $('#kategori-table').DataTable().ajax.reload();
+                                $('#mahasiswa-table').DataTable().ajax.reload();
                                 Swal.fire({
                                     title: 'Berhasil',
-                                    text: 'Kategori berhasil dihapus',
+                                    text: 'Mahasiswa berhasil dihapus',
                                     icon: 'success'
                                 });
                             },
                             error: function(xhr, status, error) {
                                 Swal.fire({
                                     title: 'Gagal',
-                                    text: 'Kategori gagal dihapus',
+                                    text: 'Mahasiswa gagal dihapus',
                                     icon: 'error'
                                 });
                             }
