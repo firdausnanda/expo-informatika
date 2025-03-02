@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\MahasiswaController;
@@ -36,4 +37,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);
+
+  // Activity Log
+  Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 });

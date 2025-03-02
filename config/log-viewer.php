@@ -48,7 +48,7 @@ return [
     |
     */
 
-    'back_to_system_url' => config('app.url', null),
+    'back_to_system_url' => '/admin/dashboard',
 
     'back_to_system_label' => null, // Displayed by default: "Back to {{ app.name }}"
 
@@ -73,6 +73,8 @@ return [
 
     'middleware' => [
         'web',
+        'auth',
+        'role:admin',
         \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
     ],
 

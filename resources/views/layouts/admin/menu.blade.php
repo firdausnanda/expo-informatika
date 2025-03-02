@@ -47,13 +47,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('admin.activity-log.index') }}" class="waves-effect">
                         <i class="bx bx-walk"></i>
                         <span key="t-dashboards">Log Aktivitas</span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('log-viewer.index') }}" class="waves-effect">
                         <i class="bx bx-error-circle"></i>
                         <span key="t-dashboards">Error Log</span>
                     </a>
