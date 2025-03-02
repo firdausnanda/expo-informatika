@@ -50,7 +50,7 @@ return [
 
     'back_to_system_url' => '/admin/dashboard',
 
-    'back_to_system_label' => null, // Displayed by default: "Back to {{ app.name }}"
+    'back_to_system_label' => 'Back to Dashboard', // Displayed by default: "Back to {{ app.name }}"
 
     /*
     |--------------------------------------------------------------------------
