@@ -199,7 +199,12 @@
 
                             // Validasi Form
                             if (form.reportValidity()) {
+                                
+                                let deskripsi = tinymce.get('deskripsi').getContent();
+                                
                                 const formData = new FormData(form);
+                                formData.append('deskripsi', deskripsi);
+
                                 $.ajax({
                                     url: "{{ route('admin.project.store') }}",
                                     type: "POST",
