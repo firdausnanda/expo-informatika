@@ -11,7 +11,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('admin/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('landing/img/favicons/android-chrome-192x192.png') }}">
+
+    <link href="{{ asset('admin/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />

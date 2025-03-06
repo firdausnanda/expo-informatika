@@ -32,7 +32,7 @@
                 <li class="menu-title" key="t-menu">Project</li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('admin.project.index') }}" class="waves-effect">
                         <i class="bx bxs-folder"></i>
                         <span key="t-dashboards">Project</span>
                     </a>

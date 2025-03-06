@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\MahasiswaController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,10 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // Mahasiswa
   Route::resource('mahasiswa', MahasiswaController::class)->except(['show', 'create', 'edit']);
+
+  // Project
+  Route::resource('project', ProjectController::class)->except(['show', 'edit']);
+  Route::post('project/gambar/store', [ProjectController::class, 'storeGambar'])->name('project.storeGambar');
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);
