@@ -49,10 +49,8 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // Activity Log
   Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
-
-
 });
 
-  //Google Controller
-  Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-  Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+//Google Controller
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);

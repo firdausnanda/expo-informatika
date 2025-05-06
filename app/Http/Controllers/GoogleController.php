@@ -33,7 +33,7 @@ class GoogleController extends Controller
 
             // Assign admin role if user doesn't have any role
             if (!$user->hasAnyRole()) {
-                $adminRole = Role::where('name', 'admin')->first();
+                $adminRole = Role::where('name', 'user')->first();
                 if ($adminRole) {
                     $user->assignRole($adminRole);
                 }
