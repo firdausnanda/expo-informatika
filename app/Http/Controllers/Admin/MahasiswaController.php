@@ -6,9 +6,11 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Mahasiswa\StoreMahasiswa;
 use App\Http\Requests\Admin\Mahasiswa\UpdateMahasiswa;
+use App\Imports\MahasiswaImport;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MahasiswaController extends Controller
 {
@@ -64,5 +66,15 @@ class MahasiswaController extends Controller
             Log::error($th->getMessage());
             return ResponseFormatter::error($th->getMessage(), 'Data mahasiswa gagal dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        Excel::import(new MahasiswaImport, $request->file('file'));
+        return ResponseFormatter::success(null, 'Data mahasiswa berhasil diimport');
     }
 }

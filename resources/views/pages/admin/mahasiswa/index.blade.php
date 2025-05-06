@@ -96,6 +96,35 @@
         </div>
     </div>
 
+    <!-- Modal Import -->
+    <div class="modal fade" id="modalImport" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Import Mahasiswa
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formImport" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">File</label>
+                            <input type="file" class="form-control" id="file" name="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Edit -->
     <div class="modal fade" id="modalEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
         aria-labelledby="modalTitleId" aria-hidden="true">
@@ -170,6 +199,12 @@
                     action: function(e, dt, node, config) {
                         $('#modalTambah').modal('show');
                     }
+                }, {
+                    text: '<i class="fas fa-file-excel mr-2"></i> Import Data',
+                    className: 'btn btn-success btn-sm me-2',
+                    action: function(e, dt, node, config) {
+                        $('#modalImport').modal('show');
+                    }
                 }],
                 columns: [{
                     targets: 0,
@@ -209,6 +244,7 @@
                     $('#mahasiswa-table').DataTable().buttons().container().appendTo(
                         '#mahasiswa-table_wrapper .col-md-6:eq(0)');
                     $('.btn-tambah').removeClass("btn-secondary");
+                    $('.btn-import').removeClass("btn-secondary");
                 }
             });
 
@@ -367,6 +403,46 @@
                     }
                 });
             });
+
+            // Import Mahasiswa
+            $('#formImport').submit(function(e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+                                
+                $.ajax({
+                    url: "{{ route('admin.mahasiswa.import') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    dataType: "JSON",
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Mohon tunggu',
+                            text: 'Mahasiswa sedang dimuat',
+                        });
+                    },
+                    success: function(response) {
+                        $('#modalImport').modal('hide');
+                        $('#mahasiswa-table').DataTable().ajax.reload();
+                        Swal.fire({
+                            title: 'Berhasil',
+                            icon: 'success',
+                            text: 'Mahasiswa berhasil diimport',
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            icon: 'error',
+                            text: xhr.responseJSON.errors[0][0],
+                        });
+                    }
+                });
+            });
+
         });
     </script>
 @endpush

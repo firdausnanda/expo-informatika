@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // Mahasiswa
   Route::resource('mahasiswa', MahasiswaController::class)->except(['show', 'create', 'edit']);
+  Route::post('mahasiswa/import', [MahasiswaController::class, 'import'])->name('mahasiswa.import');
 
   // Project
   Route::resource('project', ProjectController::class)->except(['show', 'update']);
