@@ -80,7 +80,7 @@
 
                             <div class="row justify-content-center mt-3 px-0">
                                 <div class="col-12">
-                                    <a href="#" class="vs-btn vs-btn-outline wow animate__fadeInUp w-100"
+                                    <a href="{{ route('google.login') }}" class="vs-btn vs-btn-outline wow animate__fadeInUp w-100"
                                         data-wow-delay="0.95s">
                                         <i class="fa-brands fa-google me-2"></i>Login with Google
                                     </a>

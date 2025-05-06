@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,4 +46,10 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
 
   // Activity Log
   Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
+
+
 });
+
+  //Google Controller
+  Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+  Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
