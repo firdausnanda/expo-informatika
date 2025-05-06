@@ -11,7 +11,7 @@ class UpdateProject extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,23 @@ class UpdateProject extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama' => 'required|string|max:255',
+            'kategori' => 'required|exists:kategori,id',
+            'deskripsi' => 'nullable|string',
+            'link' => 'nullable|string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nama.required' => 'Nama harus diisi',
+            'nama.string' => 'Nama harus berupa string',
+            'nama.max' => 'Nama harus memiliki maksimal 255 karakter',
+            'kategori.required' => 'Kategori harus diisi',
+            'kategori.exists' => 'Kategori tidak valid',
+            'deskripsi.string' => 'Deskripsi harus berupa string',
+            'link.string' => 'Link harus berupa string',
         ];
     }
 }

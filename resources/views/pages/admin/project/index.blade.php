@@ -118,7 +118,9 @@
                     title: 'Aksi',
                     width: '15%',
                     render: function(data, type, row, meta) {
-                        return `<button class="btn btn-sm btn-primary btn-edit"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>`;
+                        let edit = "{{ route('admin.project.edit', ':id') }}";
+                        edit = edit.replace(':id', row.id);
+                        return `<a href="${edit}" class="btn btn-sm btn-primary btn-edit"><i class="fas fa-edit"></i></a> <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>`;
                     }
                 }],
                 initComplete: function() {
@@ -128,72 +130,16 @@
                 }
             });
 
-            // Modal Edit Show
-            $('#user-table').on('click', '.btn-edit', function() {
-                let data = $('#user-table').DataTable().row($(this).parents('tr')).data();
-                $('#id-edit').val(data.id);
-                $('#nama-edit').val(data.name);
-                $('#username-edit').val(data.username);
-                $('#email-edit').val(data.email);
-                $('#role-edit').val(data.roles[0].name).change();
-                $('#password-edit').val('');
-                $('#modalEdit').modal('show');
-            });
+            //  Delete Project
+            $('#project-table').on('click', '.btn-delete', function() {
+                let data = $('#project-table').DataTable().row($(this).parents('tr')).data();
 
-            //  Edit User
-            $('#formEdit').submit(function(e) {
-                e.preventDefault();
-
-                let link = "{{ route('admin.user.update', ':id') }}";
-                link = link.replace(':id', $('#id-edit').val());
-
-                $.ajax({
-                    url: link,
-                    type: "PUT",
-                    data: $(this).serialize(),
-                    dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'User sedang dimuat',
-                            icon: 'warning'
-                        });
-                    },
-                    success: function(response) {
-                        $('#modalEdit').modal('hide');
-                        $('#user-table').DataTable().ajax.reload();
-                        Swal.fire({
-                            title: 'Berhasil',
-                            text: 'User berhasil diubah',
-                            icon: 'success'
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            title: 'Gagal',
-                            text: 'User gagal diubah',
-                            icon: 'error'
-                        });
-                        $.each(xhr.responseJSON.errors, function(key, value) {
-                            $('#formEdit').find(`#${key}-edit`).addClass('is-invalid');
-                            $('#formEdit').find(`#${key}-edit`).next(
-                                    '.invalid-feedback')
-                                .text(value);
-                        });
-                    }
-                });
-            });
-
-            //  Delete User
-            $('#user-table').on('click', '.btn-delete', function() {
-                let data = $('#user-table').DataTable().row($(this).parents('tr')).data();
-
-                let link = "{{ route('admin.user.destroy', ':id') }}";
+                let link = "{{ route('admin.project.destroy', ':id') }}";
                 link = link.replace(':id', data.id);
 
                 Swal.fire({
                     title: 'Apakah anda yakin?',
-                    text: 'Data user akan dihapus',
+                    text: 'Data project akan dihapus',
                     icon: 'error',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -209,23 +155,27 @@
                             beforeSend: function() {
                                 Swal.fire({
                                     title: 'Mohon tunggu',
-                                    text: 'User sedang dimuat',
+                                    text: 'Project sedang dimuat',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
                                     icon: 'warning'
                                 });
                             },
                             success: function(response) {
-                                $('#user-table').DataTable().ajax.reload();
+                                $('#project-table').DataTable().ajax.reload();
                                 Swal.fire({
                                     title: 'Berhasil',
-                                    text: 'User berhasil dihapus',
-                                    icon: 'success'
+                                    text: 'Project berhasil dihapus',
+                                    icon: 'success',
+                                    allowOutsideClick: false
                                 });
                             },
                             error: function(xhr, status, error) {
                                 Swal.fire({
                                     title: 'Gagal',
-                                    text: 'User gagal dihapus',
-                                    icon: 'error'
+                                    text: 'Project gagal dihapus',
+                                    icon: 'error',
+                                    allowOutsideClick: false
                                 });
                             }
                         });

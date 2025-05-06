@@ -238,6 +238,10 @@
                         Swal.fire({
                             title: 'Mohon tunggu',
                             text: 'User sedang dimuat',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
                             icon: 'warning'
                         });
                     },
@@ -294,6 +298,10 @@
                         Swal.fire({
                             title: 'Mohon tunggu',
                             text: 'User sedang dimuat',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
                             icon: 'warning'
                         });
                     },
@@ -348,6 +356,10 @@
                                 Swal.fire({
                                     title: 'Mohon tunggu',
                                     text: 'User sedang dimuat',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
                                     icon: 'warning'
                                 });
                             },

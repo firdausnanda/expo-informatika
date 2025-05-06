@@ -37,8 +37,10 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
   Route::resource('mahasiswa', MahasiswaController::class)->except(['show', 'create', 'edit']);
 
   // Project
-  Route::resource('project', ProjectController::class)->except(['show', 'edit']);
+  Route::resource('project', ProjectController::class)->except(['show', 'update']);
+  Route::post('project/update', [ProjectController::class, 'update'])->name('project.update');
   Route::post('project/gambar/store', [ProjectController::class, 'storeGambar'])->name('project.storeGambar');
+  Route::post('project/gambar/destroy', [ProjectController::class, 'destroyGambar'])->name('project.destroyGambar');
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);

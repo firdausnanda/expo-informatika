@@ -27,16 +27,17 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <h4 class="card-title mb-4">Tambah Data Project</h4>
+                            <h4 class="card-title mb-4">Edit Data Project</h4>
 
-                            <form id="formTambah" enctype="multipart/form-data">
+                            <form id="formEdit" enctype="multipart/form-data">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="nama">Nama <span class="text-danger">*</span></label>
                                             <input type="text" name="nama" id="nama" class="form-control"
-                                                placeholder="Masukkan Nama Project">
+                                                placeholder="Masukkan Nama Project" value="{{ $project->nama }}">
                                             <span class="invalid-feedback" id="nama-error"></span>
+                                            <input type="hidden" name="id" value="{{ $project->id }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -45,7 +46,9 @@
                                             <select class="form-select select2" name="kategori[]" multiple="multiple"
                                                 id="kategori">
                                                 @foreach ($kategori as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    <option value="{{ $item->id }}"
+                                                        {{ $project->kategori->contains($item->id) ? 'selected' : '' }}>
+                                                        {{ $item->nama }}</option>
                                                 @endforeach
                                             </select>
                                             <span class="invalid-feedback" id="kategori-error"></span>
@@ -54,13 +57,14 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="deskripsi">Deskripsi</label>
-                                            <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder="Masukkan Deskripsi Project"></textarea>
+                                            <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder="Masukkan Deskripsi Project">{{ $project->deskripsi }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="link">Link</label>
-                                            <input name="link" id="link" class="form-control"></input>
+                                            <input name="link" id="link" class="form-control"
+                                                value="{{ $project->link }}"></input>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -175,7 +179,7 @@
                 // Hapus elemen preview dari DOM
                 dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
 
-                const myDropzone = new Dropzone(document.getElementById('dropzone'), {
+                let myDropzone = new Dropzone(document.getElementById('dropzone'), {
                     url: "{{ route('admin.project.storeGambar') }}",
                     maxFiles: 5,
                     maxFilesize: 5,
@@ -191,22 +195,41 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     init: function() {
-                        const form = document.getElementById('formTambah');
+                        const form = document.getElementById('formEdit');
                         const submitButton = form.querySelector('button[type="submit"]');
+
+                        // Tambahkan gambar yang sudah ada dari database ke Dropzone
+                        @foreach ($project->gambar as $i => $gambar)
+                            let mockFile{{ $i }} = {
+                                name: "{{ basename($gambar->gambar) }}",
+                                id: "{{ $gambar->id }}",
+                                size: 12345
+                            }; // Mock file object
+                            this.emit("addedfile", mockFile{{ $i }});
+                            this.emit("thumbnail", mockFile{{ $i }},
+                                "{{ Storage::url($gambar->gambar) }}");
+                            this.emit("complete", mockFile{{ $i }});
+                            mockFile{{ $i }}.previewElement.classList.add(
+                                'dz-success');
+
+                            mockFile{{ $i }}.previewElement.querySelector(
+                                "[data-dz-thumbnail]").style.width = "48px";
+                            mockFile{{ $i }}.previewElement.querySelector(
+                                "[data-dz-thumbnail]").style.height = "48px";
+                        @endforeach
 
                         submitButton.addEventListener("click", function(e) {
                             e.preventDefault();
 
                             // Validasi Form
                             if (form.reportValidity()) {
-
                                 let deskripsi = tinymce.get('deskripsi').getContent();
 
                                 const formData = new FormData(form);
                                 formData.append('deskripsi', deskripsi);
 
                                 $.ajax({
-                                    url: "{{ route('admin.project.store') }}",
+                                    url: "{{ route('admin.project.update') }}",
                                     type: "POST",
                                     data: formData,
                                     dataType: "JSON",
@@ -235,9 +258,7 @@
                                         Swal.fire({
                                             title: 'Gagal',
                                             text: 'Project gagal ditambahkan',
-                                            icon: 'error',
-                                            allowOutsideClick: false,
-                                            allowEscapeKey: false
+                                            icon: 'error'
                                         });
                                         $.each(xhr.responseJSON.errors, function(
                                             key,
@@ -260,11 +281,7 @@
                                     Swal.fire({
                                         title: 'Berhasil',
                                         text: 'Data berhasil disimpan',
-                                        icon: 'success',
-                                        allowOutsideClick: false,
-                                        allowEscapeKey: false
-                                    }).then(() => {
-                                        window.location.href = "{{ route('admin.project.index') }}";
+                                        icon: 'success'
                                     });
                                 }
                             });
@@ -273,17 +290,43 @@
                                 Swal.fire({
                                     title: 'Gagal',
                                     text: 'Data gagal disimpan',
-                                    icon: 'error',
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false
+                                    icon: 'error'
                                 });
                             });
+                        });
+
+                        // Ketika file dihapus
+                        this.on("removedfile", function(file) {
+
+                            Swal.fire({
+                                title: 'Apakah anda yakin ingin menghapus gambar ini?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                            }).then((result) => {
+                                if (result.isConfirmed && file.name) {
+                                    // Kirim request untuk menghapus file dari database
+                                    fetch("{{ route('admin.project.destroyGambar') }}", {
+                                        method: "POST",
+                                        headers: {
+                                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            gambar_id: file.id
+                                        })
+                                    });
+                                } else {
+                                    myDropzone.addFile(file);
+                                }
+                            });
+
                         });
 
                     }
                 })
             }
-
         });
     </script>
 @endpush
