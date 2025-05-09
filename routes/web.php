@@ -24,6 +24,7 @@ use App\Http\Controllers\LikeController;
 */
 
 Route::get('/', [LandingController::class, 'index'])->name('index');
+Route::get('/detail/{id}', [LandingController::class, 'detail'])->name('detail');
 
 Auth::routes();
 

@@ -16,13 +16,14 @@ class GambarSeeder extends Seeder
     public function run(): void
     {
         $faker = Factory::create();
-        $size = [100, 200, 300, 400, 500];
+        $size = [300, 400, 500, 600, 700];
         $faker->addProvider(new PicsumPhotosProvider($faker));
 
         $projects = Project::all();
         foreach ($projects as $project) {
+            $rand = $size[array_rand($size)];
             $project->gambar()->create([
-                'gambar' => $faker->imageUrl($size[array_rand($size)]),
+                'gambar' => $faker->imageUrl($rand, $rand),
             ]);
         }
     }

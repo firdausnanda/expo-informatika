@@ -34,7 +34,7 @@
                             <div class="col d-flex">
                                 <div class="card shadow-sm flex-fill">
                                     <div class="card-img-top overflow-hidden" style="height: 210px;">
-                                        <img src="{{ $p['gambar'] != null ? $p['gambar'][0]['url'] : asset('landing/img/no-image.jpg') }}"
+                                        <img src="{{ $p['gambar'] != null && count($p['gambar']) > 0 ? $p['gambar'][0]['url'] : asset('landing/img/no-image.jpg') }}"
                                             class="w-100 h-100 object-fit-cover p-2" alt="{{ $p['nama'] }}">
                                     </div>
 
@@ -47,17 +47,18 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             @if ($p['likes'] == false)
-                                                <button class="btn btn-sm btn-outline-danger rounded-pill btn-like"
+                                                <button class="btn btn-sm btn-outline-secondary rounded-pill btn-like"
                                                     data-project-id="{{ $p['id'] }}">
                                                     <i class="bi bi-hand-thumbs-up"></i> Like
                                                 </button>
                                             @else
-                                                <button class="btn btn-sm btn-secondary rounded-pill btn-like"
+                                                <button class="btn btn-sm btn-danger rounded-pill btn-like"
                                                     data-project-id="{{ $p['id'] }}">
                                                     <i class="bi bi-hand-thumbs-up-fill"></i> Liked
                                                 </button>
                                             @endif
-                                            <a href="#" class="btn btn-sm btn-link text-decoration-none">
+                                            <a href="{{ route('detail', $p['id']) }}"
+                                                class="btn btn-sm btn-link text-decoration-none">
                                                 Detail <i class="bi bi-chevron-right"></i>
                                             </a>
                                         </div>
@@ -125,9 +126,9 @@
                                             '<i class="bi bi-hand-thumbs-up-fill"></i> Liked'
                                         );
                                         button.removeClass(
-                                                'btn-outline-danger')
+                                                'btn-outline-secondary')
                                             .addClass(
-                                                'btn-secondary');
+                                                'btn-danger');
                                         button.attr('data-liked', 'true');
                                     } else {
                                         var button = $(
@@ -138,9 +139,9 @@
                                             '<i class="bi bi-hand-thumbs-up"></i> Like'
                                         );
                                         button.removeClass(
-                                                'btn-secondary')
+                                                'btn-danger')
                                             .addClass(
-                                                'btn-outline-danger');
+                                                'btn-outline-secondary');
                                         button.attr('data-liked', 'false');
                                     }
                                 },

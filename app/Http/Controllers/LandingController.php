@@ -60,4 +60,16 @@ class LandingController extends Controller
 
         return view('pages.landing.index', compact('structuredData'));
     }
+
+    public function detail($id)
+    {
+        $user_id = null;
+        if (Auth::check()) {
+            $user_id = auth()->user()->id;
+        }
+        $project = Project::with('kategori', 'mahasiswa', 'gambar', 'matakuliah')->find($id);
+        $user = User::find($user_id);
+        $liked = $user->hasLiked($project);
+        return view('pages.landing.detail', compact('project', 'user', 'liked'));
+    }
 }
