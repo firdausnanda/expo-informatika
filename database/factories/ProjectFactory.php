@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Matakuliah;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,12 +17,15 @@ class ProjectFactory extends Factory
      */
     public function definition(): array
     {
+        $matakuliah = Matakuliah::all();
+
         return [
             'nama' => $this->faker->name,
             'slug' => $this->faker->slug,
             'deskripsi' => $this->faker->sentence,
             'link' => $this->faker->url,
             'status' => $this->faker->boolean,
+            'id_matakuliah' => $matakuliah->random()->id,
         ];
     }
 }

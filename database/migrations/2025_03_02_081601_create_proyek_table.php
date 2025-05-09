@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('slug')->unique();
-            $table->string('deskripsi')->nullable();
+            $table->text('deskripsi')->nullable();
             $table->string('link')->nullable();
             $table->boolean('status')->default(1);
             $table->foreignId('created_by')->nullable()->constrained('users');

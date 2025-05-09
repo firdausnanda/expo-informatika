@@ -6,18 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mattiverse\Userstamps\Traits\Userstamps;
+use Overtrue\LaravelLike\Traits\Likeable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
 class Project extends Model
 {
-    use HasFactory, SoftDeletes, Userstamps, LogsActivity;
+    use HasFactory, SoftDeletes, Userstamps, LogsActivity, Likeable;
 
     protected $table = 'proyek';
 
     protected $fillable = [
-        'kategori_id',
         'nama',
+        'id_matakuliah',
         'slug',
         'deskripsi',
         'link',
@@ -45,5 +46,15 @@ class Project extends Model
     public function gambar()
     {
         return $this->hasMany(GambarProject::class, 'proyek_id', 'id');
+    }
+
+    public function mahasiswa()
+    {
+        return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_project', 'project_id', 'mahasiswa_id');
+    }
+
+    public function matakuliah()
+    {
+        return $this->belongsTo(Matakuliah::class, 'id_matakuliah', 'id');
     }
 }

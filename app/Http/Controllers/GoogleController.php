@@ -41,7 +41,7 @@ class GoogleController extends Controller
 
             Auth::login($user);
 
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('index');
         } catch (\Exception $e) {
             return redirect('/login')->with('error', 'Gagal login dengan Google: ' . $e->getMessage());
         }

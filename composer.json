@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "bluemmb/faker-picsum-photos-provider": "2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
@@ -14,7 +15,7 @@
         "laravel/ui": "^4.6",
         "maatwebsite/excel": "^3.1",
         "opcodesio/log-viewer": "^3.12",
-        "overtrue/laravel-follow": "^5.3",
+        "overtrue/laravel-like": "^5.4",
         "spatie/laravel-activitylog": "^4.9",
         "spatie/laravel-permission": "^6.10",
         "spatie/laravel-tags": "^4.7",
