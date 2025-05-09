@@ -6,14 +6,20 @@ use App\Enums\RoleEnum;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class LandingController extends Controller
 {
     public function index()
     {
         $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
-        $user = User::find(auth()->user()->id);
+        if (Auth::check()) {
+            $user = User::find(auth()->user()->id);
+            $like = $user->likes;
+        } else {
+            $user = null;
+            $like = null;
+        }
 
         // Kelompokkan data secara hierarkis: tahun -> matakuliah -> projects
         $structuredData = $projects->groupBy([
@@ -39,7 +45,7 @@ class LandingController extends Controller
                                 'nama' => $project->nama,
                                 'deskripsi' => $project->deskripsi,
                                 'link' => $project->link,
-                                'likes' => $user->hasLiked($project),
+                                'likes' => $user ? $user->hasLiked($project) : false,
                                 'gambar' => $project->gambar->map(function ($gambar) {
                                     return [
                                         'url' => $gambar->gambar,
