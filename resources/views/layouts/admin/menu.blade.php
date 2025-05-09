@@ -29,6 +29,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="bx bx-book"></i>
+                        <span key="t-dashboards">Matakuliah</span>
+                    </a>
+                </li>
+
                 <li class="menu-title" key="t-menu">Project</li>
 
                 <li>
