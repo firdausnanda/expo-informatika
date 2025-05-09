@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,6 +13,7 @@ class LandingController extends Controller
     public function index()
     {
         $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
+        $user = User::find(auth()->user()->id);
 
         // Kelompokkan data secara hierarkis: tahun -> matakuliah -> projects
         $structuredData = $projects->groupBy([
@@ -21,22 +23,23 @@ class LandingController extends Controller
             function ($project) {
                 return $project->matakuliah->id; // Grup kedua berdasarkan matakuliah
             }
-        ])->map(function ($yearGroup, $year) {
+        ])->map(function ($yearGroup, $year) use ($user) {
             // Proses setiap tahun
             return [
                 'year' => $year,
-                'matakuliahs' => $yearGroup->map(function ($matakuliahGroup, $matakuliahId) {
+                'matakuliahs' => $yearGroup->map(function ($matakuliahGroup, $matakuliahId) use ($user) {
                     $firstProject = $matakuliahGroup->first();
 
                     // Proses setiap matakuliah dalam tahun tersebut
                     return [
                         'nama' => $firstProject->matakuliah->nama_matakuliah,
-                        'projects' => $matakuliahGroup->take(4)->map(function ($project) {
+                        'projects' => $matakuliahGroup->take(4)->map(function ($project, $key) use ($user) {
                             return [
                                 'id' => $project->id,
                                 'nama' => $project->nama,
                                 'deskripsi' => $project->deskripsi,
                                 'link' => $project->link,
+                                'likes' => $user->hasLiked($project),
                                 'gambar' => $project->gambar->map(function ($gambar) {
                                     return [
                                         'url' => $gambar->gambar,

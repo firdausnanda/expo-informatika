@@ -14,12 +14,21 @@ class LikeController extends Controller
 
         $user = User::find(auth()->user()->id);
         $project = Project::find($request->id);
-        $user->like($project);
 
-        return ResponseFormatter::success([
-            'user' => $user,
-            'project' => $project
-        ], 'Proyek berhasil disukai');
-
+        if ($user->hasLiked($project)) {
+            $user->unlike($project);
+            return ResponseFormatter::success([
+                'user' => $user,
+                'liked' => false,
+                'project' => $project
+            ], 'Proyek berhasil dihapus dari daftar suka');
+        } else {
+            $user->like($project);
+            return ResponseFormatter::success([
+                'user' => $user,
+                'liked' => true,
+                'project' => $project
+            ], 'Proyek berhasil disukai');
+        }
     }
 }

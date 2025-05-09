@@ -46,10 +46,17 @@
                                             <p class="text-muted line-clamp-3">{{ $p['deskripsi'] }}</p>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <button class="btn btn-sm btn-outline-danger rounded-pill btn-like"
-                                                data-project-id="{{ $p['id'] }}">
-                                                <i class="bi bi-hand-thumbs-up"></i> Like
-                                            </button>
+                                            @if ($p['likes'] == false)
+                                                <button class="btn btn-sm btn-outline-danger rounded-pill btn-like"
+                                                    data-project-id="{{ $p['id'] }}">
+                                                    <i class="bi bi-hand-thumbs-up"></i> Like
+                                                </button>
+                                            @else
+                                                <button class="btn btn-sm btn-secondary rounded-pill btn-like"
+                                                    data-project-id="{{ $p['id'] }}">
+                                                    <i class="bi bi-hand-thumbs-up-fill"></i> Liked
+                                                </button>
+                                            @endif
                                             <a href="#" class="btn btn-sm btn-link text-decoration-none">
                                                 Detail <i class="bi bi-chevron-right"></i>
                                             </a>
@@ -104,14 +111,45 @@
                                     id: $(this).data('project-id'),
                                 },
                                 beforeSend: function() {
-                                    $(this).html('<i class="bi bi-hand-thumbs-up-fill"></i> Loading...');
+                                    $(this).html(
+                                        '<i class="bi bi-hand-thumbs-up-fill"></i> Loading...'
+                                    );
                                 },
                                 success: function(response) {
-                                    console.log(response);
-                                    console.log($(this));
+                                    if (response.data.liked) {
+                                        var button = $(
+                                            'button[data-project-id="' +
+                                            response
+                                            .data.project.id + '"]');
+                                        button.html(
+                                            '<i class="bi bi-hand-thumbs-up-fill"></i> Liked'
+                                        );
+                                        button.removeClass(
+                                                'btn-outline-danger')
+                                            .addClass(
+                                                'btn-secondary');
+                                        button.attr('data-liked', 'true');
+                                    } else {
+                                        var button = $(
+                                            'button[data-project-id="' +
+                                            response
+                                            .data.project.id + '"]');
+                                        button.html(
+                                            '<i class="bi bi-hand-thumbs-up"></i> Like'
+                                        );
+                                        button.removeClass(
+                                                'btn-secondary')
+                                            .addClass(
+                                                'btn-outline-danger');
+                                        button.attr('data-liked', 'false');
+                                    }
                                 },
                                 error: function(xhr, status, error) {
-                                    console.log(xhr.responseText);
+                                    Swal.fire({
+                                        title: 'Oops...!',
+                                        text: 'Proyek gagal disukai',
+                                        icon: 'error',
+                                    });
                                 }
                             });
                         }

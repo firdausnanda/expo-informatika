@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth', 'role:user'], 'prefix' => 'user', 'as' =>
 
   // Like Project
   Route::post('like', [LikeController::class, 'like'])->name('like');
+  Route::post('unlike', [LikeController::class, 'unlike'])->name('unlike');
 });
 
 // Google Controller
