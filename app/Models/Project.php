@@ -57,4 +57,9 @@ class Project extends Model
     {
         return $this->belongsTo(Matakuliah::class, 'id_matakuliah', 'id');
     }
+
+    public function isLikedBy(Model $user): bool
+    {
+        return $this->likers()->where(\config('like.user_foreign_key'), $user->getKey())->exists();
+    }
 }

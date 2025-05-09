@@ -25,7 +25,8 @@
                             </h5>
                         </div>
                         <div class="col-lg-6 d-flex justify-content-end">
-                            <button class="btn btn-link text-decoration-none">Selengkapnya >></button>
+                            <a href="{{ route('more-matakuliah', [$m['id'], $i['year']]) }}"
+                                class="btn btn-link text-decoration-none">Selengkapnya >></a>
                         </div>
                     </div>
 

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
+use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Overtrue\LaravelLike\Like;
 
 class LandingController extends Controller
 {
@@ -38,6 +40,7 @@ class LandingController extends Controller
 
                     // Proses setiap matakuliah dalam tahun tersebut
                     return [
+                        'id' => $firstProject->matakuliah->id,
                         'nama' => $firstProject->matakuliah->nama_matakuliah,
                         'projects' => $matakuliahGroup->take(4)->map(function ($project, $key) use ($user) {
                             return [
@@ -71,5 +74,27 @@ class LandingController extends Controller
         $user = User::find($user_id);
         $liked = $user->hasLiked($project);
         return view('pages.landing.detail', compact('project', 'user', 'liked'));
+    }
+
+    public function moreMatakuliah($id, $tahun)
+    {
+        if (Auth::check()) {
+            $user = User::find(auth()->user()->id);
+            $like = $user->likes;
+        } else {
+            $user = null;
+            $like = null;
+        }
+
+        $matakuliah = Matakuliah::find($id);
+
+        $projects = Project::where('id_matakuliah', $matakuliah->id)
+            ->with('gambar')
+            ->where('created_at', 'like', $tahun . '%')
+            ->paginate(12);
+
+        $year = $projects->first()->created_at->year;
+
+        return view('pages.landing.more_matakuliah', compact('matakuliah', 'projects', 'user', 'like', 'year'));
     }
 }
