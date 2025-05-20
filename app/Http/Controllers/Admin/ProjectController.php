@@ -8,7 +8,9 @@ use App\Http\Requests\Admin\Project\StoreProject;
 use App\Http\Requests\Admin\Project\StoreProjectGambar;
 use App\Models\GambarProject;
 use App\Models\Kategori;
+use App\Models\Mahasiswa;
 use App\Models\Project;
+use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -39,15 +41,21 @@ class ProjectController extends Controller
     {
         try {
             $slug = Str::slug($request->nama);
+            $mahasiswa_id = json_decode($request->mahasiswa_id, true);
 
             $project = Project::create([
                 'nama' => $request->nama,
                 'slug' => $slug,
+                'id_tahun_akademik' => $request->tahun_akademik,
                 'deskripsi' => $request->deskripsi,
                 'link' => $request->link
             ]);
 
             $project->kategori()->attach($request->kategori);
+
+            foreach ($mahasiswa_id as $key => $value) {
+                $project->mahasiswa()->attach($value['id']);
+            }
 
             return response()->json([
                 'success' => true,
@@ -139,7 +147,7 @@ class ProjectController extends Controller
                 foreach ($cache as $key => $value) {
                     if ($value == $request->gambar_id) {
                         $cache[$key] = $request->gambar_id;
-                    }else{
+                    } else {
                         $cache[] = $request->gambar_id;
                     }
                 }
@@ -164,6 +172,47 @@ class ProjectController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return ResponseFormatter::error($th->getMessage(), 'Data tidak boleh kosong', 400);
+        }
+    }
+
+    public function getMahasiswaSelect(Request $request)
+    {
+        $search = $request->input('data');
+
+        $mahasiswa = Mahasiswa::select('id', 'nama', 'nim', 'prodi', 'angkatan')->when($search, function ($query) use ($search) {
+            return $query->where('nama', 'like', '%' . $search . '%')
+                ->orWhere('nim', 'like', '%' . $search . '%');
+        })
+            ->get();
+
+        return ResponseFormatter::success($mahasiswa, 'Data berhasil diambil');
+    }
+
+    public function getTahunAkademikSelect(Request $request)
+    {
+        try {
+            TahunAkademik::generateFutureYears();
+
+            $tahunAkademik = TahunAkademik::query()
+                ->orderBy('tahun_akademik', 'desc')
+                ->orderBy('semester', 'desc')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'tahun_akademik' => $item->tahun_akademik,
+                        'semester' => $item->semester,
+                        'text' => $item->tahun_akademik . ' - ' . $item->semester,
+                        'is_active' => $item->is_active
+                    ];
+                });
+
+            return ResponseFormatter::success($tahunAkademik, 'Data tahun akademik berhasil diambil');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return ResponseFormatter::error([
+                'error' => $e->getMessage()
+            ], 'Gagal mengambil data', 500);
         }
     }
 }

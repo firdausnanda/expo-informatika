@@ -28,6 +28,8 @@
     <link href="{{ asset('landing/vendor/aos/aos.css') }}" rel="stylesheet">
     <link href="{{ asset('landing/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
+    @stack('styles')
+
     <!-- Main CSS File -->
     <link href="{{ asset('landing/css/main.css') }}" rel="stylesheet">
 

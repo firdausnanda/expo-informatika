@@ -2,13 +2,13 @@
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
         <a href="{{ route('index') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-            <h1 class="sitename">Informatic Showoff</h1>
+            <h1 class="sitename">Informatic Show Off</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="{{ route('index') }}" class="active">Home</a></li>
-                <li><a href="#">Leaderboard</a></li>
+                <li><a href="{{ route('leaderboard') }}">Leaderboard</a></li>
                 <li><a href="#">History</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>

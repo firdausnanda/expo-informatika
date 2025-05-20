@@ -58,6 +58,43 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
+                                        <div class="form-group mb-2">
+                                            <label for="pembuat">Pembuat <span class="text-danger">*</span></label>
+                                            <div class="row g-2">
+                                                <div class="col-lg-5">
+                                                    <select name="pembuat" class="form-select" id="pembuat">
+                                                        <option value="" selected disabled>Pilih Mahasiswa</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-1">
+                                                    <button class="btn btn-primary" type="button"
+                                                        id="tambahPembuat">Tambahkan</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table table-bordered" id="tabelPembuat">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama</th>
+                                                    <th>Prodi</th>
+                                                    <th>Angkatan</th>
+                                                    <th>#</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="tahun_akademik">Tahun Akademik</label>
+                                            <select name="tahun_akademik" id="tahun_akademik" class="form-select">
+                                                <option value="" selected disabled>Pilih Tahun Akademik</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="link">Link</label>
                                             <input name="link" id="link" class="form-control"></input>
@@ -113,7 +150,8 @@
                                     </div>
                                     <div class="col-md-12 text-end">
                                         <a href="{{ route('admin.project.index') }}" class="btn btn-secondary">Kembali</a>
-                                        <button type="submit" id="simpan" class="btn btn-primary">Simpan Data</button>
+                                        <button type="submit" id="simpan" class="btn btn-primary">Simpan
+                                            Data</button>
                                     </div>
                                 </div>
                             </form>
@@ -131,9 +169,16 @@
 @push('styles')
     <link href="{{ asset('admin/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('admin/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('admin/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
+        type="text/css" />
 @endpush
 
 @push('scripts')
+    <script src="{{ asset('admin/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('admin/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('admin/libs/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('admin/js/select2.init.js') }}"></script>
@@ -142,11 +187,262 @@
     <script>
         $(document).ready(function() {
 
-            // Init Select2
-            $('.select2').select2({
-                placeholder: 'Pilih Kategori',
-                allowClear: true
+            var selectedStudents = [];
+
+            // Init DataTable Tabel Pembuat
+            let table = $('#tabelPembuat').DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                paging: false,
+                ordering: false,
+                info: false,
+                searching: false,
+                destroy: true,
+                data: selectedStudents,
+                columns: [{
+                        data: 'no',
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        data: 'nama',
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'prodi',
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'angkatan',
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'aksi',
+                        render: function(data, type, row, meta) {
+                            return '<button type="button" class="btn btn-danger btn-sm btn-hapus">Hapus</button>';
+                        }
+                    }
+                ]
+            })
+
+            // Init Select2 Pembuat
+            $('#pembuat').select2({
+                placeholder: 'Pilih Mahasiswa...',
+                minimumInputLength: 2,
+                ajax: {
+                    url: "{{ route('admin.project.getMahasiswaSelect') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            data: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        var formattedData = $.map(data.data, function(item) {
+                            return {
+                                id: item.id,
+                                text: item.nama,
+                                nama: item.nama,
+                                nim: item.nim,
+                                prodi: item.prodi,
+                                angkatan: item.angkatan
+                            };
+                        });
+                        return {
+                            results: formattedData
+                        };
+                    }
+                },
+                templateResult: function(data) {
+                    if (!data.id) return data.text;
+
+                    // Container utama
+                    var $container = $('<div>').css({
+                        'padding': '5px',
+                        'line-height': '1.4'
+                    });
+
+                    // Baris nama
+                    $container.append(
+                        $('<div>').css({
+                            'font-weight': '600',
+                            'font-size': '14px'
+                        }).text(data.nama)
+                    );
+
+                    // Baris NIM
+                    $container.append(
+                        $('<div>').css({
+                            'font-size': '12px',
+                            'color': '#666'
+                        }).text('NIM: ' + data.nim)
+                    );
+
+                    return $container;
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                }
             });
+
+            $('#pembuat').on('select2:select', function(e) {
+                // Tambahkan data yang dipilih ke array
+                var data = e.params.data;
+                selectedStudents.push({
+                    id: data.id,
+                    nama: data.nama,
+                    nim: data.nim,
+                    prodi: data.prodi,
+                    angkatan: data.angkatan
+                });
+            });
+
+            // Event Tambah Mahasiswa
+            $('#tambahPembuat').on('click', function() {
+                // $('#tabelPembuat').DataTable().clear().rows.add(selectedStudents).draw();
+                var currentIds = table.rows().data().toArray().map(item => item.id);
+                var newStudents = [];
+                var dupCount = 0;
+
+                // Filter hanya yang belum ada di tabel
+                selectedStudents.forEach(function(student) {
+                    if (currentIds.includes(student.id)) {
+                        dupCount++;
+                    } else {
+                        newStudents.push(student);
+                    }
+                });
+
+
+                // Tampilkan notifikasi
+                if (newStudents.length <= 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'mahasiswa sudah ada di tabel',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                }
+
+                // Tambahkan yang baru
+                if (newStudents.length > 0) {
+                    table.rows.add(newStudents).draw();
+                }
+
+                // Update selectedStudents hanya dengan yang baru
+                selectedStudents = newStudents;
+
+                $('#pembuat').val(null).trigger('change');
+            });
+
+            // Event Hapus Mahasiswa
+            $('#tabelPembuat').on('click', '.btn-hapus', function() {
+                var row = $(this).closest('tr');
+                var table = $('#tabelPembuat').DataTable();
+                var rowData = table.row(row).data();
+
+                Swal.fire({
+                    title: 'Hapus Mahasiswa',
+                    text: 'Apakah Anda yakin ingin menghapus mahasiswa ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Animasi fade out sebelum menghapus
+                        $(row).fadeOut('fast', function() {
+                            table.row(row).remove().draw('page');
+                            selectedStudents = selectedStudents.filter(s => s.id !== rowData
+                                .id);
+                        });
+                    }
+                });
+            });
+
+            // Init Select2 Kategori
+            $('#kategori').select2({
+                placeholder: 'Pilih Kategori',
+                allowClear: true,
+            });
+
+            // Init Select2 Tahun Akademik
+            $('#tahun_akademik').select2({
+                placeholder: 'Pilih Tahun Akademik',
+                width: '100%',
+                ajax: {
+                    url: "{{ route('admin.project.getTahunAkademikSelect') }}",
+                    dataType: 'json',
+                    processResults: function(data) {
+                        return {
+                            results: data.data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.tahun_akademik + ' - ' + item.semester,
+                                    tahun_akademik: item.tahun_akademik,
+                                    semester: item.semester,
+                                    is_active: item.is_active
+                                };
+                            })
+                        };
+                    }
+                },
+                templateResult: function(data) {
+                    if (!data.id) return data.text;
+
+                    var $container = $('<div>');
+                    $container.append($('<strong>').text(data.tahun_akademik));
+                    $container.append($('<div>')
+                        .css({
+                            'font-size': '0.8em',
+                            'color': '#666'
+                        })
+                        .text('Semester: ' + data.semester));
+
+                    if (data.is_active) {
+                        $container.append($('<span>')
+                            .css({
+                                'float': 'right',
+                                'background': '#28a745',
+                                'color': 'white',
+                                'padding': '2px 5px',
+                                'border-radius': '3px',
+                                'font-size': '0.7em'
+                            })
+                            .text('Aktif'));
+                    }
+
+                    return $container;
+                }
+            });
+
+            function getAllStudentsFromTable() {
+                let table = $('#tabelPembuat').DataTable();
+                let allData = table.rows().data().toArray(); // Konversi ke array
+
+                // Format data untuk FormData
+                let students = [];
+                allData.forEach(row => {
+                    students.push({
+                        id: row.id,
+                        nama: row.nama,
+                        nim: row.nim
+                    });
+                });
+
+                return students;
+            }
 
             // Init TinyMCE
             tinymce.init({
@@ -204,7 +500,8 @@
 
                                 const formData = new FormData(form);
                                 formData.append('deskripsi', deskripsi);
-
+                                formData.append('mahasiswa_id', JSON.stringify(
+                                    getAllStudentsFromTable()));
                                 $.ajax({
                                     url: "{{ route('admin.project.store') }}",
                                     type: "POST",
@@ -264,7 +561,8 @@
                                         allowOutsideClick: false,
                                         allowEscapeKey: false
                                     }).then(() => {
-                                        window.location.href = "{{ route('admin.project.index') }}";
+                                        window.location.href =
+                                            "{{ route('admin.project.index') }}";
                                     });
                                 }
                             });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
+use App\Helpers\ResponseFormatter;
 use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\User;
@@ -96,5 +97,18 @@ class LandingController extends Controller
         $year = $projects->first()->created_at->year;
 
         return view('pages.landing.more_matakuliah', compact('matakuliah', 'projects', 'user', 'like', 'year'));
+    }
+
+    public function leaderboard(Request $request)
+    {
+        if ($request->ajax()) {
+            ResponseFormatter::success(
+                null,
+                'Data berhasil diambil'
+            );
+        }
+
+        $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
+        return view('pages.landing.leaderboard', compact('projects'));
     }
 }

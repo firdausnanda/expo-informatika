@@ -25,4 +25,9 @@ class Mahasiswa extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function project()
+    {
+        return $this->belongsToMany(Project::class, 'mahasiswa_project', 'mahasiswa_id', 'project_id');
+    }
 }
