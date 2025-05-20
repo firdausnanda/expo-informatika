@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Matakuliah;
+use App\Models\TahunAkademik;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,8 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         $matakuliah = Matakuliah::all();
-
+        $tahunAkademik = TahunAkademik::all();
+        
         return [
             'nama' => $this->faker->name,
             'slug' => $this->faker->slug,
@@ -26,6 +28,7 @@ class ProjectFactory extends Factory
             'link' => $this->faker->url,
             'status' => $this->faker->boolean,
             'id_matakuliah' => $matakuliah->random()->id,
+            'id_tahun_akademik' => $tahunAkademik->random()->id,
         ];
     }
 }

@@ -116,7 +116,7 @@ class ProjectController extends Controller
         return view('pages.admin.project.edit', compact('project', 'kategori', 'mahasiswa'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateProject $request)
     {
         try {
             $slug = Str::slug($request->nama);
