@@ -88,9 +88,18 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="tahun_akademik">Tahun Akademik</label>
+                                            <label for="tahun_akademik">Tahun Akademik <span
+                                                    class="text-danger">*</span></label>
                                             <select name="tahun_akademik" id="tahun_akademik" class="form-select">
                                                 <option value="" selected disabled>Pilih Tahun Akademik</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="matakuliah">Matakuliah <span class="text-danger">*</span></label>
+                                            <select name="matakuliah" id="matakuliah" class="form-select">
+                                                <option value="" selected disabled>Pilih Matakuliah</option>
                                             </select>
                                         </div>
                                     </div>
@@ -422,6 +431,48 @@
                             })
                             .text('Aktif'));
                     }
+
+                    return $container;
+                }
+            });
+
+            // Init Select2 Matakuliah
+            $('#matakuliah').select2({
+                placeholder: 'Pilih Matakuliah',
+                allowClear: true,
+                minimumInputLength: 2,
+                ajax: {
+                    url: "{{ route('admin.project.getMatakuliahSelect') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            data: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.nama_matakuliah + '(' + item.kode_matakuliah + ')',
+                                    kode: item.kode_matakuliah
+                                };
+                            })
+                        };
+                    }
+                },
+                templateResult: function(data) {
+                    if (!data.id) return data.text;
+                    
+                    var $container = $('<div>');
+                    $container.append($('<strong>').text(data.text));
+                    $container.append($('<div>')
+                        .css({
+                            'font-size': '0.8em',
+                            'color': '#666'
+                        })
+                        .text('Kode Matakuliah: ' + data.kode));
 
                     return $container;
                 }

@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
   Route::post('project/gambar/destroy', [ProjectController::class, 'destroyGambar'])->name('project.destroyGambar');
   Route::get('project/get-mahasiswa-select', [ProjectController::class, 'getMahasiswaSelect'])->name('project.getMahasiswaSelect');
   Route::get('project/get-tahun-akademik-select', [ProjectController::class, 'getTahunAkademikSelect'])->name('project.getTahunAkademikSelect');
+  Route::get('project/get-matakuliah-select', [ProjectController::class, 'getMatakuliahSelect'])->name('project.getMatakuliahSelect');
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);

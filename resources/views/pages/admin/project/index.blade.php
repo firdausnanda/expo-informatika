@@ -110,7 +110,7 @@
                     width: '20%',
                     data: 'status',
                     render: function(data, type, row, meta) {
-                        return data ? 'Aktif' : 'Tidak Aktif';
+                        return data ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>';
                     }
                 }, {
                     targets: 4,

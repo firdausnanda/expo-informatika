@@ -19,6 +19,7 @@ class Project extends Model
     protected $fillable = [
         'nama',
         'id_matakuliah',
+        'id_tahun_akademik',
         'slug',
         'deskripsi',
         'link',
@@ -61,5 +62,10 @@ class Project extends Model
     public function isLikedBy(Model $user): bool
     {
         return $this->likers()->where(\config('like.user_foreign_key'), $user->getKey())->exists();
+    }
+
+    public function tahun_akademik()
+    {
+        return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik', 'id');
     }
 }

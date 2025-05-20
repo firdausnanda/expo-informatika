@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\Project\StoreProjectGambar;
 use App\Models\GambarProject;
 use App\Models\Kategori;
 use App\Models\Mahasiswa;
+use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class ProjectController extends Controller
                 'nama' => $request->nama,
                 'slug' => $slug,
                 'id_tahun_akademik' => $request->tahun_akademik,
+                'id_matakuliah' => $request->matakuliah,
                 'deskripsi' => $request->deskripsi,
                 'link' => $request->link
             ]);
@@ -98,26 +100,44 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $kategori = Kategori::get();
-        $project = Project::with('kategori', 'gambar')->find($id);
+        $project = Project::with('kategori', 'gambar', 'tahun_akademik', 'mahasiswa', 'matakuliah')->find($id);
+        $mahasiswa = $project->mahasiswa->map(function($item) {
+            return [
+                'id' => $item->id,
+                'nama' => $item->nama,
+                'prodi' => $item->prodi,
+                'angkatan' => $item->angkatan
+            ];
+        })->toJson();
+
         if (!$project) {
             return ResponseFormatter::error('Data tidak ditemukan', 'Data tidak ditemukan', 404);
         }
-        return view('pages.admin.project.edit', compact('project', 'kategori'));
+        return view('pages.admin.project.edit', compact('project', 'kategori', 'mahasiswa'));
     }
 
     public function update(Request $request)
     {
         try {
             $slug = Str::slug($request->nama);
+            $mahasiswa_id = json_decode($request->mahasiswa_id, true);
+
             $project = Project::find($request->id);
             $project->update([
                 'nama' => $request->nama,
                 'slug' => $slug,
+                'id_tahun_akademik' => $request->tahun_akademik,
+                'id_matakuliah' => $request->matakuliah,
                 'deskripsi' => $request->deskripsi,
                 'link' => $request->link
             ]);
 
             $project->kategori()->sync($request->kategori);
+
+            $project->mahasiswa()->detach();
+            foreach ($mahasiswa_id as $key => $value) {
+                $project->mahasiswa()->attach($value['id']);
+            }
 
             $cache = Cache::get('delete_gambar');
             // dd($cache);
@@ -214,5 +234,17 @@ class ProjectController extends Controller
                 'error' => $e->getMessage()
             ], 'Gagal mengambil data', 500);
         }
+    }
+
+    public function getMatakuliahSelect(Request $request)
+    {
+        $search = $request->input('data');
+
+        $matakuliah = Matakuliah::select('id', 'nama_matakuliah', 'kode_matakuliah')->when($search, function ($query) use ($search) {
+            return $query->where('nama_matakuliah', 'like', '%' . $search . '%')
+                ->orWhere('kode_matakuliah', 'like', '%' . $search . '%');
+        })->get();
+
+        return ResponseFormatter::success($matakuliah, 'Data matakuliah berhasil diambil');
     }
 }
