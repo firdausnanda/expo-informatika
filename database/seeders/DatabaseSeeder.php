@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             MahasiswaSeeder::class,
             MatakuliahSeeder::class,
+            TahunAkademikSeeder::class,
             ProjectSeeder::class,
             KategoriProjectSeeder::class,
             GambarSeeder::class,
