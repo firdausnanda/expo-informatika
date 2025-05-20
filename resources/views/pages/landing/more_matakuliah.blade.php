@@ -29,7 +29,7 @@
                                     <p class="text-muted line-clamp-3">{{ $p->deskripsi }}</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    @if ($p->isLikedBy($user))
+                                    @if (Auth::check() && $p->isLikedBy($user))
                                         <button class="btn btn-sm btn-danger rounded-pill btn-like"
                                             data-project-id="{{ $p->id }}">
                                             <i class="bi bi-hand-thumbs-up-fill"></i> Liked

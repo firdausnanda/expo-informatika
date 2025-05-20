@@ -3,16 +3,16 @@
 @section('content')
     <section id="culture-category" class="culture-category section">
 
-        @forelse ($structuredData as $k => $i)
+        @forelse ($result as $k => $i)
             <!-- Section Title -->
             <div class="container section-title mb-4" data-aos="fade-up">
                 <div class="section-title-container d-flex align-items-center justify-content-between">
                     {{-- <h2>Announcement : ISO #1 2025</h2> --}}
-                    <h2>Announcement : #{{ $k + 1 }} {{ $i['year'] }}</h2>
+                    <h2>Announcement : #{{ $k + 1 }} {{ $i['tahun_akademik'] }} - {{ $i['semester'] }}</h2>
                 </div>
             </div><!-- End Section Title -->
 
-            @foreach ($i['matakuliahs'] as $j => $m)
+            @foreach ($i['matakuliah'] as $j => $m)
                 <div class="container mb-4" data-aos="fade-up" data-aos-delay="100">
 
                     <div class="row">
@@ -20,12 +20,12 @@
                             <h5 class="text-secondary">
                                 Matakuliah :
                                 <span class="fw-bold text-dark">
-                                    {{ $m['nama'] }}
+                                    {{ $m['nama_matakuliah'] }}
                                 </span>
                             </h5>
                         </div>
                         <div class="col-lg-6 d-flex justify-content-end">
-                            <a href="{{ route('more-matakuliah', [$m['id'], $i['year']]) }}"
+                            <a href="{{ route('more-matakuliah', [$m['id_matakuliah'], $i['id_tahun_akademik']]) }}"
                                 class="btn btn-link text-decoration-none">Selengkapnya >></a>
                         </div>
                     </div>

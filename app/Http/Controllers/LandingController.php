@@ -15,7 +15,6 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
         if (Auth::check()) {
             $user = User::find(auth()->user()->id);
             $like = $user->likes;
@@ -24,45 +23,40 @@ class LandingController extends Controller
             $like = null;
         }
 
-        // Kelompokkan data secara hierarkis: tahun -> matakuliah -> projects
-        $structuredData = $projects->groupBy([
-            function ($project) {
-                return $project->created_at->year; // Grup pertama berdasarkan tahun
-            },
-            function ($project) {
-                return $project->matakuliah->id; // Grup kedua berdasarkan matakuliah
-            }
-        ])->map(function ($yearGroup, $year) use ($user) {
-            // Proses setiap tahun
-            return [
-                'year' => $year,
-                'matakuliahs' => $yearGroup->map(function ($matakuliahGroup, $matakuliahId) use ($user) {
-                    $firstProject = $matakuliahGroup->first();
+        $projects = Project::with(['tahun_akademik', 'matakuliah'])
+            ->orderBy('id_tahun_akademik', 'DESC')
+            ->get();
 
-                    // Proses setiap matakuliah dalam tahun tersebut
-                    return [
-                        'id' => $firstProject->matakuliah->id,
-                        'nama' => $firstProject->matakuliah->nama_matakuliah,
-                        'projects' => $matakuliahGroup->take(4)->map(function ($project, $key) use ($user) {
-                            return [
-                                'id' => $project->id,
-                                'nama' => $project->nama,
-                                'deskripsi' => $project->deskripsi,
-                                'link' => $project->link,
-                                'likes' => $user ? $user->hasLiked($project) : false,
-                                'gambar' => $project->gambar->map(function ($gambar) {
-                                    return [
-                                        'url' => $gambar->gambar,
-                                    ];
-                                })
-                            ];
-                        })->unique('id')->values()->toArray()
-                    ];
-                })->unique('nama')->values()->toArray()
-            ];
-        })->unique('year')->values()->toArray();
+        $result = $projects->groupBy('id_tahun_akademik')
+            ->take(10)->map(function ($tahunGroups, $tahunId) use ($user) {
+                return [
+                    'id_tahun_akademik' => $tahunId,
+                    'tahun_akademik' => $tahunGroups->first()->tahun_akademik->tahun_akademik,
+                    'semester' => $tahunGroups->first()->tahun_akademik->semester,
+                    'matakuliah' => $tahunGroups->groupBy('id_matakuliah')->map(function ($matkulGroups, $matkulId) use ($user) {
+                        return [
+                            'id_matakuliah' => $matkulId,
+                            'nama_matakuliah' => $matkulGroups->first()->matakuliah->nama_matakuliah,
+                            'projects' => $matkulGroups->take(8)->map(function ($project) use ($user) {
+                                return [
+                                    'id' => $project->id,
+                                    'nama' => $project->nama_project,
+                                    'deskripsi' => $project->deskripsi,
+                                    'link' => $project->link,
+                                    'likes' => $user ? $user->hasLiked($project) : false,
+                                    'gambar' => $project->gambar->map(function ($gambar) {
+                                        return [
+                                            'url' => $gambar->gambar,
+                                        ];
+                                    })
+                                ];
+                            })->toArray()
+                        ];
+                    })->values()->toArray()
+                ];
+            })->values()->toArray();
 
-        return view('pages.landing.index', compact('structuredData'));
+        return view('pages.landing.index', compact('result'));
     }
 
     public function detail($id)
@@ -73,7 +67,11 @@ class LandingController extends Controller
         }
         $project = Project::with('kategori', 'mahasiswa', 'gambar', 'matakuliah')->find($id);
         $user = User::find($user_id);
-        $liked = $user->hasLiked($project);
+        if ($user) {
+            $liked = $user->hasLiked($project);
+        } else {
+            $liked = false;
+        }
         return view('pages.landing.detail', compact('project', 'user', 'liked'));
     }
 
@@ -90,8 +88,8 @@ class LandingController extends Controller
         $matakuliah = Matakuliah::find($id);
 
         $projects = Project::where('id_matakuliah', $matakuliah->id)
+            ->where('id_tahun_akademik', $tahun)
             ->with('gambar')
-            ->where('created_at', 'like', $tahun . '%')
             ->paginate(12);
 
         $year = $projects->first()->created_at->year;
