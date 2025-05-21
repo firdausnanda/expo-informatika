@@ -108,14 +108,21 @@ class LandingController extends Controller
 
     public function leaderboard(Request $request)
     {
+        $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')
+            ->where('status', 1)
+            ->withCount('likers')
+            ->take(100)
+            ->orderBy('likers_count', 'desc')
+            ->get();
+
         if ($request->ajax()) {
-            ResponseFormatter::success(
-                null,
+            return ResponseFormatter::success(
+                $projects,
                 'Data berhasil diambil'
             );
         }
 
-        $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
+
         return view('pages.landing.leaderboard', compact('projects'));
     }
 
