@@ -7,6 +7,7 @@ use App\Helpers\ResponseFormatter;
 use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Overtrue\LaravelLike\Like;
@@ -108,5 +109,56 @@ class LandingController extends Controller
 
         $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')->get();
         return view('pages.landing.leaderboard', compact('projects'));
+    }
+
+    public function history(Request $request)
+    {
+        if ($request->ajax()) {
+            $matakuliah = Matakuliah::where('nama_matakuliah', 'like', '%' . $request->search . '%')->get();
+            return ResponseFormatter::success($matakuliah, 'Data berhasil diambil');
+        }
+        return view('pages.landing.history');
+    }
+
+    public function search(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'search' => 'required',
+        ], [
+            'search.required' => 'Kata kunci pencarian proyek harus diisi',
+        ]);
+
+        // Cek apakah user sedang login
+        if (Auth::check()) {
+            $user = User::find(auth()->user()->id);
+            $like = $user->likes;
+        } else {
+            $user = null;
+            $like = null;
+        }
+
+        // Cari proyek berdasarkan kata kunci`
+        $projects = Project::with('gambar')
+            ->where(function ($query) use ($request) {
+                $query->where('nama', 'like', '%' . $request->search . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+            });
+
+        if ($request->matkul) {
+            $projects->where('id_matakuliah', $request->matkul);
+        }
+
+        if ($request->startDate) {
+            $startDate = Carbon::createFromLocaleFormat('j F Y', 'id', $request->startDate)->format('Y-m-d');
+            $projects->where('created_at', '>=', $startDate);
+        }
+
+        if ($request->endDate) {
+            $endDate = Carbon::createFromLocaleFormat('j F Y', 'id', $request->endDate)->format('Y-m-d');
+            $projects->where('created_at', '<=', $endDate);
+        }
+        $result = $projects->paginate(12);
+        return view('pages.landing.history-result', compact('result', 'user', 'like'));
     }
 }

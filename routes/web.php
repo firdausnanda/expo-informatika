@@ -28,6 +28,10 @@ Route::get('/detail/{id}', [LandingController::class, 'detail'])->name('detail')
 Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMatakuliah'])->name('more-matakuliah');
 Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
 
+// History
+Route::get('/history', [LandingController::class, 'history'])->name('history');
+Route::get('/history/search', [LandingController::class, 'search'])->name('history.search');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

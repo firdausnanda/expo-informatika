@@ -13,6 +13,6 @@ class MatakuliahSeeder extends Seeder
      */
     public function run(): void
     {
-        Matakuliah::factory()->count(5)->create();
+        Matakuliah::factory()->count(250)->create();
     }
 }

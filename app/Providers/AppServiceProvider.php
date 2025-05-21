@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $matakuliah = Matakuliah::take(10)->get();
+        $matakuliah = Matakuliah::take(5)->get();
 
         View::composer('layouts.landing.footer', function ($view) use ($matakuliah) {
             $view->with('matakuliah', $matakuliah);

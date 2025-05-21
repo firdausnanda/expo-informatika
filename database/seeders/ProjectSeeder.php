@@ -15,7 +15,7 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         $mahasiswa = Mahasiswa::all();
-        $projects = Project::factory()->count(250)->create();
+        $projects = Project::factory()->count(500)->create();
         foreach ($projects as $project) {
             $project->mahasiswa()->attach($mahasiswa->random(), ['status' => true]);
         }

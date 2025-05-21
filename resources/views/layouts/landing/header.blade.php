@@ -9,7 +9,7 @@
             <ul>
                 <li><a href="{{ route('index') }}" class="active">Home</a></li>
                 <li><a href="{{ route('leaderboard') }}">Leaderboard</a></li>
-                <li><a href="#">History</a></li>
+                <li><a href="{{ route('history') }}">History</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Contact</a></li>
                 @auth
