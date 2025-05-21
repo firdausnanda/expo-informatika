@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('kode_matakuliah')->unique();
             $table->string('nama_matakuliah');
+            $table->integer('sks');
+            $table->integer('semester');
+            $table->text('deskripsi')->nullable();
+            $table->boolean('status')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');

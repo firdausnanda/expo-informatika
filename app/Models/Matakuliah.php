@@ -13,28 +13,41 @@ class Matakuliah extends Model
 {
     use HasFactory, SoftDeletes, Userstamps, LogsActivity;
 
+    protected $table = 'm_matakuliah';
+
     protected $fillable = [
         'kode_matakuliah',
         'nama_matakuliah',
+        'sks',
+        'semester',
+        'deskripsi',
+        'status'
     ];
 
-    protected $table = 'm_matakuliah';
+    protected $casts = [
+        'status' => 'boolean',
+        'sks' => 'integer',
+        'semester' => 'integer'
+    ];
+
+    protected $guarded = ['id'];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logAll()
+            ->logOnly(['kode_matakuliah', 'nama_matakuliah', 'sks', 'semester', 'deskripsi', 'status'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
 
     public function getDescriptionForEvent(string $eventName): string
     {
-        return "Matakuliah {$this->nama_matakuliah} has been {$eventName}";
+        return "Mata Kuliah {$this->nama_matakuliah} telah {$eventName}";
     }
 
+    // Relationships
     public function projects()
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class, 'id_matakuliah');
     }
 }

@@ -30,7 +30,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="waves-effect">
+                    <a href="{{ route('admin.mata-kuliah.index') }}" class="waves-effect">
                         <i class="bx bx-book"></i>
                         <span key="t-dashboards">Matakuliah</span>
                     </a>
