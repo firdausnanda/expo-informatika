@@ -629,10 +629,47 @@
                                         });
                                     },
                                     success: function(response) {
-                                        myDropzone.options.params = {
-                                            project_id: response.project_id
-                                        };
-                                        myDropzone.processQueue();
+                                        // Jika ada file di Dropzone, proses upload
+                                        if (myDropzone.getQueuedFiles().length >
+                                            0) {
+                                            myDropzone.options.params = {
+                                                project_id: response.project_id
+                                            };
+                                            myDropzone.processQueue();
+
+                                            // Handle ketika upload selesai
+                                            myDropzone.on("queuecomplete",
+                                            function() {
+                                                Swal.fire({
+                                                    title: 'Berhasil',
+                                                    text: 'Data berhasil disimpan',
+                                                    icon: 'success'
+                                                }).then(() => {
+                                                    window.location
+                                                        .href =
+                                                        "{{ route('admin.project.index') }}";
+                                                });
+                                            });
+
+                                            myDropzone.on("error", function(file,
+                                                response) {
+                                                Swal.fire({
+                                                    title: 'Gagal',
+                                                    text: 'Upload gambar gagal',
+                                                    icon: 'error'
+                                                });
+                                            });
+                                        } else {
+                                            // Jika tidak ada file di Dropzone, langsung redirect
+                                            Swal.fire({
+                                                title: 'Berhasil',
+                                                text: 'Data berhasil disimpan',
+                                                icon: 'success'
+                                            }).then(() => {
+                                                window.location.href =
+                                                    "{{ route('admin.project.index') }}";
+                                            });
+                                        }
                                     },
                                     error: function(xhr, status,
                                         error) {

@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Project\StoreProject;
 use App\Http\Requests\Admin\Project\StoreProjectGambar;
+use App\Http\Requests\Admin\Project\UpdateProject;
 use App\Models\GambarProject;
 use App\Models\Kategori;
 use App\Models\Mahasiswa;

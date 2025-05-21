@@ -18,8 +18,8 @@
                     <div class="mb-3 icon-input">
                         <label for="searchKeywords" class="form-label">Kata Kunci Pencarian Proyek</label>
                         <div class="input-group rounded-pill">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-pill">
-                                <i class="fa fa-search"></i>
+                            <span class="input-group-text bg-white border-end-0 rounded-start-pill @error('search') border-danger @enderror">
+                                <i class="fa fa-search @error('search') text-danger @enderror"></i>
                             </span>
                             <input type="text" name="search"
                                 class="form-control border-start-0 rounded-end-pill @error('search') is-invalid @enderror"
