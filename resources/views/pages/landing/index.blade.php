@@ -35,7 +35,7 @@
                             <div class="col d-flex">
                                 <div class="card shadow-sm flex-fill">
                                     <div class="card-img-top overflow-hidden" style="height: 210px;">
-                                        <img src="{{ $p['gambar'] != null && count($p['gambar']) > 0 ? $p['gambar'][0]['url'] : asset('landing/img/no-image.jpg') }}"
+                                        <img src="{{ $p['gambar'] != null && count($p['gambar']) > 0 ? Storage::url($p['gambar'][0]['url']) : asset('landing/img/no-image.jpg') }}"
                                             class="w-100 h-100 object-fit-cover p-2" alt="{{ $p['nama'] }}">
                                     </div>
 
@@ -44,7 +44,7 @@
                                         <h5 class="card-title text-truncate" title="{{ $p['nama'] }}">{{ $p['nama'] }}
                                         </h5>
                                         <div class="card-text mb-2 flex-grow-1">
-                                            <p class="text-muted line-clamp-3">{{ $p['deskripsi'] }}</p>
+                                            <p class="text-muted line-clamp-3">{!! $p['deskripsi'] !!}</p>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             @if ($p['likes'] == false)
@@ -172,4 +172,16 @@
             });
         });
     </script>
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('error') }}'
+                });
+            });
+        </script>
+    @endif
 @endsection

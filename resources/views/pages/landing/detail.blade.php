@@ -27,12 +27,12 @@
 
                             <script type="application/json" class="swiper-config">
                                 {
-                                    "loop": true,
+                                    "loop": {{ count($project->gambar) >= 3 ? 'true' : 'false' }},
                                     "speed": 600,
                                     "autoplay": {
                                         "delay": 5000
                                     },
-                                    "slidesPerView": "auto",
+                                    "slidesPerView": 1,
                                     "centeredSlides": true,
                                     "pagination": {
                                         "el": ".swiper-pagination",
@@ -47,7 +47,8 @@
                             </script>
                             <div class="swiper-wrapper">
                                 @forelse ($project->gambar as $g)
-                                    <div class="swiper-slide" style="background-image: url('{{ $g->gambar }}');">
+                                    <div class="swiper-slide"
+                                        style="background-image: url('{{ Storage::url($g->gambar) }}');">
                                     </div>
 
                                 @empty

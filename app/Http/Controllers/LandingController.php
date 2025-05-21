@@ -25,6 +25,7 @@ class LandingController extends Controller
         }
 
         $projects = Project::with(['tahun_akademik', 'matakuliah'])
+            ->where('status', 1)
             ->orderBy('id_tahun_akademik', 'DESC')
             ->get();
 
@@ -41,7 +42,7 @@ class LandingController extends Controller
                             'projects' => $matkulGroups->take(8)->map(function ($project) use ($user) {
                                 return [
                                     'id' => $project->id,
-                                    'nama' => $project->nama_project,
+                                    'nama' => $project->nama,
                                     'deskripsi' => $project->deskripsi,
                                     'link' => $project->link,
                                     'likes' => $user ? $user->hasLiked($project) : false,
@@ -66,7 +67,14 @@ class LandingController extends Controller
         if (Auth::check()) {
             $user_id = auth()->user()->id;
         }
-        $project = Project::with('kategori', 'mahasiswa', 'gambar', 'matakuliah')->find($id);
+        $project = Project::with('kategori', 'mahasiswa', 'gambar', 'matakuliah')
+            ->where('status', 1)
+            ->find($id);
+
+        if (!$project) {
+            return redirect()->route('index')->with('error', 'Proyek tidak ditemukan');
+        }
+
         $user = User::find($user_id);
         if ($user) {
             $liked = $user->hasLiked($project);

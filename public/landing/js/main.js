@@ -6,7 +6,7 @@
 * License: https://bootstrapmade.com/license/
 */
 
-(function() {
+(function () {
   "use strict";
 
   /**
@@ -50,7 +50,7 @@
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function(e) {
+    navmenu.addEventListener('click', function (e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
       this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
@@ -106,16 +106,17 @@
    * Init swiper sliders
    */
   function initSwiper() {
-    document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
-      let config = JSON.parse(
-        swiperElement.querySelector(".swiper-config").innerHTML.trim()
-      );
+    document.querySelectorAll(".init-swiper").forEach(swiperElement => {
+      const config = JSON.parse(swiperElement.querySelector(".swiper-config").textContent);
+      const slides = swiperElement.querySelectorAll('.swiper-slide');
 
-      if (swiperElement.classList.contains("swiper-tab")) {
-        initSwiperWithCustomPagination(swiperElement, config);
-      } else {
-        new Swiper(swiperElement, config);
+      // Final verification
+      if (config.loop && slides.length < 3) {
+        config.loop = false;
+        console.log('Swiper: Disabled loop due to insufficient slides');
       }
+
+      new Swiper(swiperElement, config);
     });
   }
 

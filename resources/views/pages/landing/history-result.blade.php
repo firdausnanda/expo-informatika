@@ -17,7 +17,7 @@
                     <div class="col d-flex">
                         <div class="card shadow-sm flex-fill">
                             <div class="card-img-top overflow-hidden" style="height: 210px;">
-                                <img src="{{ $p->gambar != null && count($p->gambar) > 0 ? $p->gambar[0]->gambar : asset('landing/img/no-image.jpg') }}"
+                                <img src="{{ $p->gambar != null && count($p->gambar) > 0 ? Storage::url($p->gambar[0]->gambar) : asset('landing/img/no-image.jpg') }}"
                                     class="w-100 h-100 object-fit-cover p-2" alt="{{ $p->nama }}">
                             </div>
 
