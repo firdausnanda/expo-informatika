@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\Admin\MataKuliahController;
+use App\Http\Controllers\MoreMatakuliahController;
+use App\Http\Controllers\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +28,8 @@ use App\Http\Controllers\LikeController;
 
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/detail/{id}', [LandingController::class, 'detail'])->name('detail');
-Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMatakuliah'])->name('more-matakuliah');
-Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
+Route::get('/more-matakuliah/{id_matakuliah}/{id_tahun_akademik}', [MoreMatakuliahController::class, 'index'])->name('more-matakuliah');
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 
 // History
 Route::get('/history', [LandingController::class, 'history'])->name('history');
@@ -47,19 +50,19 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
   Route::post('mahasiswa/import', [MahasiswaController::class, 'import'])->name('mahasiswa.import');
 
   // Project
-  Route::resource('project', ProjectController::class)->except(['show', 'update']);
+  Route::resource('project', ProjectController::class)->except(['show', 'edit']);
   Route::post('project/update', [ProjectController::class, 'update'])->name('project.update');
   Route::post('project/gambar/store', [ProjectController::class, 'storeGambar'])->name('project.storeGambar');
   Route::post('project/gambar/destroy', [ProjectController::class, 'destroyGambar'])->name('project.destroyGambar');
-  Route::get('project/get-mahasiswa-select', [ProjectController::class, 'getMahasiswaSelect'])->name('project.getMahasiswaSelect');
-  Route::get('project/get-tahun-akademik-select', [ProjectController::class, 'getTahunAkademikSelect'])->name('project.getTahunAkademikSelect');
-  Route::get('project/get-matakuliah-select', [ProjectController::class, 'getMatakuliahSelect'])->name('project.getMatakuliahSelect');
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);
 
   // Activity Log
   Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
+
+  // Mata Kuliah
+  Route::resource('mata-kuliah', MataKuliahController::class)->except(['show', 'create', 'edit']);
 });
 
 Route::group(['middleware' => ['auth', 'role:user'], 'prefix' => 'user', 'as' => 'user.'], function () {

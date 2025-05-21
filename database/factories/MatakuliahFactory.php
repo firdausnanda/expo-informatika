@@ -19,6 +19,10 @@ class MatakuliahFactory extends Factory
         return [
             'kode_matakuliah' => $this->faker->unique()->randomNumber(4),
             'nama_matakuliah' => $this->faker->word,
+            'sks' => $this->faker->numberBetween(1, 6),
+            'semester' => $this->faker->numberBetween(1, 14),
+            'deskripsi' => $this->faker->sentence,
+            'status' => $this->faker->boolean,
         ];
     }
 }
