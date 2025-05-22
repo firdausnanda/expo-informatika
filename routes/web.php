@@ -35,6 +35,12 @@ Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('lea
 Route::get('/history', [LandingController::class, 'history'])->name('history');
 Route::get('/history/search', [LandingController::class, 'search'])->name('history.search');
 
+// Kategori
+Route::get('/kategori/{slug}', [LandingController::class, 'kategori'])->name('kategori');
+
+// Matakuliah
+Route::get('/matakuliah/{slug}', [LandingController::class, 'matakuliah'])->name('matakuliah');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

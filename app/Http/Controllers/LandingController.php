@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Helpers\ResponseFormatter;
+use App\Models\Kategori;
 use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\User;
@@ -30,7 +31,7 @@ class LandingController extends Controller
             ->get();
 
         $result = $projects->groupBy('id_tahun_akademik')
-            ->take(10)->map(function ($tahunGroups, $tahunId) use ($user) {
+            ->take(3)->map(function ($tahunGroups, $tahunId) use ($user) {
                 return [
                     'id_tahun_akademik' => $tahunId,
                     'tahun_akademik' => $tahunGroups->first()->tahun_akademik->tahun_akademik,
@@ -181,5 +182,33 @@ class LandingController extends Controller
         }
         $result = $projects->paginate(12);
         return view('pages.landing.history-result', compact('result', 'user', 'like'));
+    }
+
+    public function kategori($slug)
+    {
+        $kategori = Kategori::where('slug', $slug)->first();
+        $projects = Project::with('gambar')
+            ->whereHas('kategori', function ($query) use ($slug) {
+                $query->where('slug', $slug);
+            })
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_tahun_akademik', 'desc')
+            ->take(100)
+            ->paginate(12);
+
+        return view('pages.landing.view-by-kategori', compact('kategori', 'projects'));
+    }
+
+    public function matakuliah($id)
+    {
+        $matakuliah = Matakuliah::where('id', $id)->first();
+        $projects = Project::with('gambar')
+            ->where('id_matakuliah', $matakuliah->id)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_tahun_akademik', 'desc')
+            ->take(100)
+            ->paginate(12);
+
+        return view('pages.landing.view-by-matakuliah', compact('matakuliah', 'projects'));
     }
 }

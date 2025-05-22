@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $matakuliah = Matakuliah::take(5)->get();
+        $matakuliah = Matakuliah::withCount('projects')->orderBy('projects_count', 'desc')->take(5)->get();
         $kategori = Kategori::orderByRaw('RAND()')->take(15)->get();
 
         View::composer('layouts.landing.footer', function ($view) use ($matakuliah, $kategori) {
