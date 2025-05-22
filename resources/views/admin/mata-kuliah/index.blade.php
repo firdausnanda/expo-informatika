@@ -186,14 +186,14 @@
                     targets: 0,
                     title: 'No',
                     className: 'text-center',
-                    width: '10%',
+                    width: '5%',
                     render: function(data, type, row, meta) {
                         return meta.row + 1;
                     }
                 }, {
                     targets: 1,
                     title: 'Mata Kuliah',
-                    width: '60%',
+                    width: '65%',
                     data: 'nama_matakuliah',
                     render: function(data, type, row, meta) {
                         return `<span class="fw-bold">${data}</span>
