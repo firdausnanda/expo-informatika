@@ -5,7 +5,9 @@
         <!-- Filter Tabs -->
         <div class="filter-tabs" role="tablist" aria-label="Filter options">
             <button type="button" class="active" aria-pressed="true">All Time</button>
-            <button type="button" aria-pressed="false">Weekly</button>
+            <a href="{{ route('leaderboard.monthly') }}">
+                <button type="button" aria-pressed="false">Monthly</button>
+            </a>
         </div>
 
         <!-- Background text -->

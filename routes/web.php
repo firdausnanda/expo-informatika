@@ -29,7 +29,10 @@ use App\Http\Controllers\LeaderboardController;
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/detail/{id}', [LandingController::class, 'detail'])->name('detail');
 Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMatakuliah'])->name('more-matakuliah');
+
+// Leaderboard
 Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
+Route::get('/leaderboard/monthly', [LandingController::class, 'leaderboardMonthly'])->name('leaderboard.monthly');
 
 // History
 Route::get('/history', [LandingController::class, 'history'])->name('history');
@@ -41,6 +44,7 @@ Route::get('/kategori/{slug}', [LandingController::class, 'kategori'])->name('ka
 // Matakuliah
 Route::get('/matakuliah/{slug}', [LandingController::class, 'matakuliah'])->name('matakuliah');
 
+Route::get('/tahun-akademik', [LandingController::class, 'tahunAkademik'])->name('tahun-akademik');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
