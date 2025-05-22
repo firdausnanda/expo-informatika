@@ -248,4 +248,17 @@ class ProjectController extends Controller
 
         return ResponseFormatter::success($matakuliah, 'Data matakuliah berhasil diambil');
     }
+
+    public function aktif(Request $request)
+    {
+        $project = Project::find($request->id);
+
+        if ($project->status == 1) {
+            $project->update(['status' => 0]);
+        } else {
+            $project->update(['status' => 1]);
+        }
+
+        return ResponseFormatter::success('Data berhasil diubah', 'Data berhasil diubah');
+    }
 }

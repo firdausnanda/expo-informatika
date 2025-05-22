@@ -46,7 +46,6 @@
 
         </div>
     </div>
-
 @endsection
 
 @push('scripts')
@@ -110,7 +109,9 @@
                     width: '20%',
                     data: 'status',
                     render: function(data, type, row, meta) {
-                        return data ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-danger">Tidak Aktif</span>';
+                        return data ?
+                            '<button class="badge bg-success border-0 btn-aktif">Aktif</button>' :
+                            '<button class="badge bg-danger border-0 btn-aktif">Tidak Aktif</button>';
                     }
                 }, {
                     targets: 4,
@@ -181,6 +182,57 @@
                         });
                     }
                 });
+            });
+
+            //  Aktif Project
+            $('#project-table').on('click', '.btn-aktif', function() {
+
+                let data = $('#project-table').DataTable().row($(this).parents('tr')).data();
+                let link = "{{ route('admin.project.aktif') }}";
+                link = link.replace(':id', data.id);
+
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: 'Project akan diubah status',
+                    icon: 'warning',
+                    showCancelButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: link,
+                            type: "POST",
+                            data: {
+                                id: data.id
+                            },
+                            dataType: "JSON",
+                            beforeSend: function() {
+                                Swal.fire({
+                                    title: 'Mohon tunggu',
+                                    text: 'Project sedang dimuat',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    icon: 'warning'
+                                });
+                            },
+                            success: function(response) {
+                                $('#project-table').DataTable().ajax.reload();
+                                Swal.fire({
+                                    title: 'Berhasil',
+                                    text: 'Project berhasil diubah',
+                                    icon: 'success',
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    title: 'Gagal',
+                                    text: 'Project gagal diubah',
+                                    icon: 'error',
+                                });
+                            }
+                        });
+                    }
+                });
+
             });
         });
     </script>
