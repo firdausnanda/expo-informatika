@@ -258,7 +258,7 @@
                     width: '30%',
                     data: 'likers_count',
                     render: function(data, type, row, meta) {
-                        let date = moment(row.created_at).locale('id').format('ll')
+                        let date = moment(row.last_like?.created_at).locale('id').fromNow();
                         let url = '{{ route('admin.project.edit', ['project' => ':id']) }}';
                         let link = url.replace(':id', row.id);
 

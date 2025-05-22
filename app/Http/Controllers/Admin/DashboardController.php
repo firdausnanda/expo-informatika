@@ -61,11 +61,15 @@ class DashboardController extends Controller
 
     public function projectRated()
     {
-        $projects = Project::with('likers', 'matakuliah')
+        $projects = Project::with([
+            'matakuliah',
+            'lastLike' => fn($q) => $q->with('user')->latest()
+        ])
             ->where('status', 1)
             ->withCount('likers')
             ->has('likers')
             ->orderBy('likers_count', 'desc')
+            ->take(100)
             ->get();
 
         return ResponseFormatter::success(

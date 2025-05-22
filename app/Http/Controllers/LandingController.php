@@ -75,12 +75,17 @@ class LandingController extends Controller
             return redirect()->route('index')->with('error', 'Proyek tidak ditemukan');
         }
 
+
         $user = User::find($user_id);
         if ($user) {
             $liked = $user->hasLiked($project);
         } else {
             $liked = false;
         }
+
+
+        views($project)->record();
+
         return view('pages.landing.detail', compact('project', 'user', 'liked'));
     }
 
@@ -111,6 +116,7 @@ class LandingController extends Controller
         $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')
             ->where('status', 1)
             ->withCount('likers')
+            ->withCount('views')
             ->take(100)
             ->orderBy('likers_count', 'desc')
             ->get();

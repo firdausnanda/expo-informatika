@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use CyrildeWit\EloquentViewable\Contracts\Viewable;
+use CyrildeWit\EloquentViewable\InteractsWithViews;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Mattiverse\Userstamps\Traits\Userstamps;
+use Overtrue\LaravelLike\Like;
 use Overtrue\LaravelLike\Traits\Likeable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class Project extends Model
+class Project extends Model implements Viewable
 {
-    use HasFactory, SoftDeletes, Userstamps, LogsActivity, Likeable;
+    use HasFactory, SoftDeletes, Userstamps, LogsActivity, Likeable, InteractsWithViews;
 
     protected $table = 'proyek';
 
@@ -67,5 +70,12 @@ class Project extends Model
     public function tahun_akademik()
     {
         return $this->belongsTo(TahunAkademik::class, 'id_tahun_akademik', 'id');
+    }
+
+    public function lastLike()
+    {
+        return $this->morphOne(Like::class, 'likeable')
+            ->latest()
+            ->with('user');
     }
 }
