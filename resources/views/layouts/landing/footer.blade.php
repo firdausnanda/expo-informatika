@@ -28,6 +28,13 @@
                     @endforeach
                 </ul>
             </div>
+
+            <div class="col-lg-5 col-md-2 footer-links">
+                <h4>Kategori</h4>
+                @foreach ($kategori as $k)
+                    <a class="btn btn-sm btn-outline-secondary rounded-pill m-2" href="#">{{ $k->nama }}</a>
+                @endforeach
+            </div>
         </div>
     </div>
 
