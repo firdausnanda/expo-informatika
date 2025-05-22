@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\User;
@@ -56,5 +57,20 @@ class DashboardController extends Controller
         });
 
         return view('pages.admin.dashboard.index', compact('project', 'user', 'projectweek', 'projectliked', 'projectprecentage', 'projectratedprecentage', 'userprecentage', 'chartData'));
+    }
+
+    public function projectRated()
+    {
+        $projects = Project::with('likers', 'matakuliah')
+            ->where('status', 1)
+            ->withCount('likers')
+            ->has('likers')
+            ->orderBy('likers_count', 'desc')
+            ->get();
+
+        return ResponseFormatter::success(
+            $projects,
+            'Data berhasil diambil'
+        );
     }
 }

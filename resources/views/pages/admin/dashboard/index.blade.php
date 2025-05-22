@@ -1,5 +1,33 @@
 @extends('layouts.admin.main')
 
+@push('style')
+    <link href="{{ asset('admin/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('admin/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    <style>
+        .score-badge {
+            background: #f46a6a;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-feature-settings: 'tnum';
+            margin-bottom: 1rem;
+            justify-content: center;
+            width: fit-content;
+        }
+
+        .score-badge i {
+            font-size: 0.75rem;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -140,15 +168,41 @@
                 </div>
             </div>
             <!-- end row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Project Rated</h4>
+
+                            <table class="table table-bordered dt-responsive nowrap w-100" id="project-rated-table">
+                                <thead>
+                                    <tr>
+                                        <th>Project</th>
+                                        <th>Total Liked</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- container-fluid -->
     </div>
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('admin/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('admin/libs/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ asset('landing/vendor/moment-js/moment-with-locales.js') }}"></script>
     <script>
         $(document).ready(function() {
+
+            // Project Chart
             new Chart(document.getElementById('lineChart'), {
                 type: 'line',
                 data: {
@@ -176,6 +230,52 @@
                         }
                     }
                 }
+            });
+
+            // Project Rated Table
+            $('#project-rated-table').DataTable({
+                ordering: false,
+                processing: true,
+                lengthChange: false,
+                ajax: {
+                    url: "{{ route('admin.dashboard.projectRated') }}",
+                    type: 'GET',
+                    dataType: 'JSON'
+                },
+                columns: [{
+                    targets: 0,
+                    title: 'Nama Project',
+                    width: '70%',
+                    data: 'nama',
+                    render: function(data, type, row, meta) {
+                        return `<span class="fw-bold">${data}</span>
+                        <br>
+                        <span class="text-secondary text-sm">${row.matakuliah.nama_matakuliah}</span>`;
+                    }
+                }, {
+                    targets: 0,
+                    title: 'Total Liked',
+                    width: '30%',
+                    data: 'likers_count',
+                    render: function(data, type, row, meta) {
+                        let date = moment(row.created_at).locale('id').format('ll')
+                        let url = '{{ route('admin.project.edit', ['project' => ':id']) }}';
+                        let link = url.replace(':id', row.id);
+
+                        let datas = `<div class="row g-3 justify-items-center align-items-center" style="font-size:12px">
+                                            <div class="col-lg-8">
+                                                <div class="score-badge mb-2"><i class="fas fa-heart"></i> ${row.likers_count} Like</div>
+                                                <div class="text-start text-secondary">
+                                                    Last Updated. <span class="text-dark fw-bold">${date}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <a href="${link}" class="btn btn-link text-decoration-none" style="font-size:13px">Detail<i class="fas fa-chevron-right ms-2"></i></a>
+                                            </div>
+                                        </div>`
+                        return datas;
+                    }
+                }]
             });
 
         });

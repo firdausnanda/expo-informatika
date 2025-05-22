@@ -41,6 +41,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+  Route::get('/dashboard/project-rated', [DashboardController::class, 'projectRated'])->name('dashboard.projectRated');
 
   // Kategori
   Route::resource('kategori', KategoriController::class)->except(['show', 'create', 'edit']);

@@ -455,7 +455,6 @@
                             let date = moment(row.created_at).locale('id').format('ll')
                             let url = '{{ route('detail', ['id' => ':id']) }}';
                             let link = url.replace(':id', row.id);
-                            console.log(row);
 
                             let datas = `<div class="row g-3 justify-items-center align-items-center" style="font-size:12px">
                                             <div class="col-lg-4">
