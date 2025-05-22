@@ -110,6 +110,11 @@
                 <form id="formImport" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
+                            <button class="btn btn-primary btn-sm" type="button" id="downloadTemplate">
+                                <i class="fas fa-file-excel me-2"></i>Download Template
+                            </button>
+                        </div>
+                        <div class="mb-3">
                             <label for="file" class="form-label">File</label>
                             <input type="file" class="form-control" id="file" name="file">
                         </div>
@@ -441,6 +446,11 @@
                         });
                     }
                 });
+            });
+
+            // Download Template
+            $('#downloadTemplate').click(function() {
+                window.open("{{ asset('template/template_mahasiswa.xlsx') }}", '_blank');
             });
 
         });
