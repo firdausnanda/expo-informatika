@@ -20,13 +20,20 @@
                 </div>
             </div>
 
-            <div class="col-lg-2 col-md-3 footer-links">
+            <div class="col-lg-3 col-md-3 footer-links">
                 <h4>Matakuliah</h4>
                 <ul>
                     @foreach ($matakuliah as $m)
-                        <li><a href="#">{{ $m->nama_matakuliah }}</a></li>
+                        <li><a href="{{ route('matakuliah', $m->id) }}">{{ $m->nama_matakuliah }}</a></li>
                     @endforeach
                 </ul>
+            </div>
+
+            <div class="col-lg-5 col-md-3 footer-links">
+                <h4>Kategori</h4>
+                @foreach ($kategori as $k)
+                    <a class="btn btn-sm btn-outline-secondary rounded-pill m-2" href="{{ route('kategori', $k->slug) }}">{{ $k->nama }}</a>
+                @endforeach
             </div>
         </div>
     </div>

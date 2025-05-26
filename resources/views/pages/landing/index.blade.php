@@ -8,7 +8,7 @@
             <div class="container section-title mb-4" data-aos="fade-up">
                 <div class="section-title-container d-flex align-items-center justify-content-between">
                     {{-- <h2>Announcement : ISO #1 2025</h2> --}}
-                    <h2>Announcement : #{{ $k + 1 }} {{ $i['tahun_akademik'] }} - {{ $i['semester'] }}</h2>
+                    <h2>Announcement : #{{ $i['id_tahun_akademik'] }} {{ $i['tahun_akademik'] }} - {{ $i['semester'] }}</h2>
                 </div>
             </div><!-- End Section Title -->
 

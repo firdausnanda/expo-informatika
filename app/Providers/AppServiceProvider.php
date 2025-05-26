@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Kategori;
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -21,10 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $matakuliah = Matakuliah::take(5)->get();
+        $matakuliah = Matakuliah::withCount('projects')->orderBy('projects_count', 'desc')->take(5)->get();
+        $kategori = Kategori::orderByRaw('RAND()')->take(15)->get();
 
-        View::composer('layouts.landing.footer', function ($view) use ($matakuliah) {
+        View::composer('layouts.landing.footer', function ($view) use ($matakuliah, $kategori) {
             $view->with('matakuliah', $matakuliah);
+            $view->with('kategori', $kategori);
         });
     }
 }

@@ -17,7 +17,7 @@ class MataKuliahController extends Controller
             $data = Matakuliah::latest()->get();
             return ResponseFormatter::success($data, 'Data mata kuliah berhasil diambil');
         }
-        return view('admin.mata-kuliah.index');
+        return view('pages.admin.mata-kuliah.index');
     }
 
     public function store(Request $request)

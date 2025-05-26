@@ -29,21 +29,35 @@ use App\Http\Controllers\LeaderboardController;
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/detail/{id}', [LandingController::class, 'detail'])->name('detail');
 Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMatakuliah'])->name('more-matakuliah');
+
+// Leaderboard
 Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
+<<<<<<< HEAD
 Route::get('/about', [LandingController::class, 'about'])->name('about');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
 Route::post('/contact', [LandingController::class, 'store'])->name('contact.store');
+=======
+Route::get('/leaderboard/monthly', [LandingController::class, 'leaderboardMonthly'])->name('leaderboard.monthly');
+>>>>>>> bd05a7bf56472fee49654abd8fc092b7f61280c5
 
 // History
 Route::get('/history', [LandingController::class, 'history'])->name('history');
 Route::get('/history/search', [LandingController::class, 'search'])->name('history.search');
 
+// Kategori
+Route::get('/kategori/{slug}', [LandingController::class, 'kategori'])->name('kategori');
+
+// Matakuliah
+Route::get('/matakuliah/{slug}', [LandingController::class, 'matakuliah'])->name('matakuliah');
+
+Route::get('/tahun-akademik', [LandingController::class, 'tahunAkademik'])->name('tahun-akademik');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+  Route::get('/dashboard/project-rated', [DashboardController::class, 'projectRated'])->name('dashboard.projectRated');
 
   // Kategori
   Route::resource('kategori', KategoriController::class)->except(['show', 'create', 'edit']);
@@ -60,6 +74,7 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
   Route::get('project/get-mahasiswa-select', [ProjectController::class, 'getMahasiswaSelect'])->name('project.getMahasiswaSelect');
   Route::get('project/get-tahun-akademik-select', [ProjectController::class, 'getTahunAkademikSelect'])->name('project.getTahunAkademikSelect');
   Route::get('project/get-matakuliah-select', [ProjectController::class, 'getMatakuliahSelect'])->name('project.getMatakuliahSelect');
+  Route::post('project/aktif', [ProjectController::class, 'aktif'])->name('project.aktif');
 
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Helpers\ResponseFormatter;
+use App\Models\Kategori;
 use App\Models\Matakuliah;
 use App\Models\Project;
+use App\Models\TahunAkademik;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,7 +32,7 @@ class LandingController extends Controller
             ->get();
 
         $result = $projects->groupBy('id_tahun_akademik')
-            ->take(10)->map(function ($tahunGroups, $tahunId) use ($user) {
+            ->take(3)->map(function ($tahunGroups, $tahunId) use ($user) {
                 return [
                     'id_tahun_akademik' => $tahunId,
                     'tahun_akademik' => $tahunGroups->first()->tahun_akademik->tahun_akademik,
@@ -75,12 +77,17 @@ class LandingController extends Controller
             return redirect()->route('index')->with('error', 'Proyek tidak ditemukan');
         }
 
+
         $user = User::find($user_id);
         if ($user) {
             $liked = $user->hasLiked($project);
         } else {
             $liked = false;
         }
+
+
+        views($project)->record();
+
         return view('pages.landing.detail', compact('project', 'user', 'liked'));
     }
 
@@ -111,6 +118,7 @@ class LandingController extends Controller
         $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')
             ->where('status', 1)
             ->withCount('likers')
+            ->withCount('views')
             ->take(100)
             ->orderBy('likers_count', 'desc')
             ->get();
@@ -123,7 +131,44 @@ class LandingController extends Controller
         }
 
 
-        return view('pages.landing.leaderboard', compact('projects'));
+        return view('pages.landing.leaderboard.index', compact('projects'));
+    }
+
+    public function leaderboardMonthly(Request $request)
+    {
+        $getYear = date('Y');
+        $tahunAkademikSelected = TahunAkademik::where('tahun_akademik', $getYear . '/' . ($getYear + 1))->first();
+
+        $query = Project::with('mahasiswa', 'gambar', 'matakuliah')
+            ->where('status', 1)
+            ->withCount('likers')
+            ->withCount('views')
+            ->take(100)
+            ->orderBy('likers_count', 'desc');
+
+        // Cek apakah ada filter bulan yang dipilih
+        if ($request->month) {
+            $query->where('id_tahun_akademik', $request->month);
+        } else {
+            $query->where('id_tahun_akademik', $tahunAkademikSelected->id);
+        }
+
+        $result = $query->get();
+
+        if ($request->ajax()) {
+
+            if ($request->table) {
+                return ResponseFormatter::success($result, 'Data berhasil diambil');
+            }else{
+                return ResponseFormatter::success([
+                    'html' => view('components.top-cards', compact('result'))->render(),
+                    'count' => $result->count()
+                ], 'Data berhasil diambil');
+            }
+
+        }
+
+        return view('pages.landing.leaderboard.monthly', compact('result', 'tahunAkademikSelected'));
     }
 
     public function history(Request $request)
@@ -132,7 +177,7 @@ class LandingController extends Controller
             $matakuliah = Matakuliah::where('nama_matakuliah', 'like', '%' . $request->search . '%')->get();
             return ResponseFormatter::success($matakuliah, 'Data berhasil diambil');
         }
-        return view('pages.landing.history');
+        return view('pages.landing.history.index');
     }
 
     public function search(Request $request)
@@ -174,7 +219,46 @@ class LandingController extends Controller
             $projects->where('created_at', '<=', $endDate);
         }
         $result = $projects->paginate(12);
-        return view('pages.landing.history-result', compact('result', 'user', 'like'));
+        return view('pages.landing.history.history-result', compact('result', 'user', 'like'));
+    }
+
+    public function kategori($slug)
+    {
+        $kategori = Kategori::where('slug', $slug)->first();
+        $projects = Project::with('gambar')
+            ->whereHas('kategori', function ($query) use ($slug) {
+                $query->where('slug', $slug);
+            })
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_tahun_akademik', 'desc')
+            ->take(100)
+            ->paginate(12);
+
+        return view('pages.landing.view-by-kategori', compact('kategori', 'projects'));
+    }
+
+    public function matakuliah($id)
+    {
+        $matakuliah = Matakuliah::where('id', $id)->first();
+        $projects = Project::with('gambar')
+            ->where('id_matakuliah', $matakuliah->id)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_tahun_akademik', 'desc')
+            ->take(100)
+            ->paginate(12);
+
+        return view('pages.landing.view-by-matakuliah', compact('matakuliah', 'projects'));
+    }
+
+    public function tahunAkademik()
+    {
+        $tahunAkademik = TahunAkademik::orderBy('tahun_akademik', 'desc')->get();
+        $getYear = date('Y');
+        $tahunAkademikSelected = TahunAkademik::where('tahun_akademik', $getYear . '/' . ($getYear + 1))->first();
+        return ResponseFormatter::success([
+            'tahunAkademik' => $tahunAkademik,
+            'tahunAkademikSelected' => $tahunAkademikSelected
+        ], 'Data berhasil diambil');
     }
 
     public function about()

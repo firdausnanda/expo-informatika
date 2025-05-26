@@ -5,7 +5,9 @@
         <!-- Filter Tabs -->
         <div class="filter-tabs" role="tablist" aria-label="Filter options">
             <button type="button" class="active" aria-pressed="true">All Time</button>
-            <button type="button" aria-pressed="false">Weekly</button>
+            <a href="{{ route('leaderboard.monthly') }}">
+                <button type="button" aria-pressed="false">Monthly</button>
+            </a>
         </div>
 
         <!-- Background text -->
@@ -34,7 +36,7 @@
                     <p class="role">{{ Str::limit($i->matakuliah->nama_matakuliah, 20) }}</p>
                     <div class="stats" aria-label="Alerts, Trades, Average Gain">
                         <div>
-                            <div>497</div>
+                            <div>{{ $i->views_count }}</div>
                             <div>View</div>
                         </div>
                         <div>
@@ -455,7 +457,6 @@
                             let date = moment(row.created_at).locale('id').format('ll')
                             let url = '{{ route('detail', ['id' => ':id']) }}';
                             let link = url.replace(':id', row.id);
-                            console.log(row);
 
                             let datas = `<div class="row g-3 justify-items-center align-items-center" style="font-size:12px">
                                             <div class="col-lg-4">
@@ -466,7 +467,7 @@
                                                     <i class="far fa-clock text-black-50 me-2"></i>${date}
                                                 </div>
                                                 <div class="text-start text-dark fw-bold">
-                                                    <i class="far fa-eye text-black-50 me-2"></i>40
+                                                    <i class="far fa-eye text-black-50 me-2"></i>${row.views_count}
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">

@@ -22,5 +22,21 @@ class TahunAkademikSeeder extends Seeder
             'tahun_akademik' => '2025/2026',
             'semester' => 'Genap',
         ]);
+
+        TahunAkademik::create([
+            'tahun_akademik' => '2026/2027',
+            'semester' => 'Ganjil',
+        ]);
+
+        TahunAkademik::create([
+            'tahun_akademik' => '2026/2027',
+            'semester' => 'Genap',
+        ]);
+
+        TahunAkademik::create([
+            'tahun_akademik' => '2027/2028',
+            'semester' => 'Ganjil',
+        ]);
+        
     }
 }
