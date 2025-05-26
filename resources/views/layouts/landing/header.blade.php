@@ -10,8 +10,8 @@
                 <li><a href="{{ route('index') }}" class="active">Home</a></li>
                 <li><a href="{{ route('leaderboard') }}">Leaderboard</a></li>
                 <li><a href="{{ route('history') }}">History</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="{{ route('about') }}">About</a></li>
+                <li><a href="{{ route('contact') }}">Contact</a></li>
                 @auth
                     <li>
                         <form action="{{ route('logout') }}" method="POST">

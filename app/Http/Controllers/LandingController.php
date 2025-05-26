@@ -176,4 +176,29 @@ class LandingController extends Controller
         $result = $projects->paginate(12);
         return view('pages.landing.history-result', compact('result', 'user', 'like'));
     }
+
+    public function about()
+    {
+        return view('pages.landing.about');
+    }
+
+    public function contact()
+    {
+        return view('pages.landing.contact');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string'
+        ]);
+
+        // Here you can add code to handle the form submission
+        // For example, sending an email or storing in database
+
+        return redirect()->back()->with('success', 'Thank you for your message. We will get back to you soon!');
+    }
 }
