@@ -32,13 +32,10 @@ Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMata
 
 // Leaderboard
 Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
-<<<<<<< HEAD
 Route::get('/about', [LandingController::class, 'about'])->name('about');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
 Route::post('/contact', [LandingController::class, 'store'])->name('contact.store');
-=======
 Route::get('/leaderboard/monthly', [LandingController::class, 'leaderboardMonthly'])->name('leaderboard.monthly');
->>>>>>> bd05a7bf56472fee49654abd8fc092b7f61280c5
 
 // History
 Route::get('/history', [LandingController::class, 'history'])->name('history');
