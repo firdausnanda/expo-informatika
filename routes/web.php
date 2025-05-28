@@ -49,7 +49,12 @@ Route::get('/kategori/{slug}', [LandingController::class, 'kategori'])->name('ka
 Route::get('/matakuliah/{slug}', [LandingController::class, 'matakuliah'])->name('matakuliah');
 
 Route::get('/tahun-akademik', [LandingController::class, 'tahunAkademik'])->name('tahun-akademik');
-Auth::routes();
+Auth::routes([
+  'register' => false,
+  'reset' => false,
+  'verify' => false,
+  'confirm' => false,
+]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
