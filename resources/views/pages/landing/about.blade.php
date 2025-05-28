@@ -12,7 +12,7 @@
             <p class="lead text-muted mb-4">Our platform connects students, educators, and institutions to create a more engaging and effective learning experience.</p>
             <div class="d-flex gap-3">
                 <div class="stat-item">
-                    <h3 class="fw-bold text-primary mb-0">1000+</h3>
+                    <h3 class="fw-bold text-primary mb-0">500+</h3>
                     <p class="text-muted mb-0">Active Students</p>
                 </div>
                 <div class="stat-item">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="col-lg-6">
-            <img src="{{ asset('landing/images/about-hero.jpg') }}" alt="Students collaborating" class="img-fluid rounded-3 shadow">
+            <img src="{{ asset('landing/img/hero-1.jpg') }}" alt="Students collaborating" class="img-fluid rounded-3 shadow">
         </div>
     </div>
 
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Team Section -->
-    <div class="team-section mb-5">
+    {{-- <div class="team-section mb-5">
         <h2 class="text-center mb-5" data-aos="fade-up">Meet Our Team</h2>
         <div class="row g-4">
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Values Section -->
     <div class="values-section">
@@ -147,6 +147,7 @@
 @endsection
 
 @push('styles')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 <style>
     .bg-text {
         font-weight: 800;

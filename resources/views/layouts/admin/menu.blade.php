@@ -45,6 +45,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('admin.contact-us.index') }}" class="waves-effect">
+                        <i class="bx bx-message-square-dots"></i>
+                        <span key="t-dashboards">Contact Us</span>
+                    </a>
+                </li>
+
                 <li class="menu-title" key="t-menu">Monitoring</li>
 
                 <li>

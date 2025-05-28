@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\MahasiswaController;
@@ -34,7 +35,7 @@ Route::get('/more-matakuliah/{id}/{tahun}', [LandingController::class, 'moreMata
 Route::get('/leaderboard', [LandingController::class, 'leaderboard'])->name('leaderboard');
 Route::get('/about', [LandingController::class, 'about'])->name('about');
 Route::get('/contact', [LandingController::class, 'contact'])->name('contact');
-Route::post('/contact', [LandingController::class, 'store'])->name('contact.store');
+Route::post('/contact', [LandingController::class, 'storeContact'])->name('contact.store');
 Route::get('/leaderboard/monthly', [LandingController::class, 'leaderboardMonthly'])->name('leaderboard.monthly');
 
 // History
@@ -73,6 +74,10 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin', 'as' 
   Route::get('project/get-matakuliah-select', [ProjectController::class, 'getMatakuliahSelect'])->name('project.getMatakuliahSelect');
   Route::post('project/aktif', [ProjectController::class, 'aktif'])->name('project.aktif');
 
+  // Contact Us
+  Route::resource('contact-us', ContactUsController::class)->except(['show', 'create', 'edit']);
+  Route::get('contact-us/view/{id}', [ContactUsController::class, 'view'])->name('contact-us.view');
+  
   // User Management
   Route::resource('user', UserController::class)->except(['show', 'create', 'edit']);
 

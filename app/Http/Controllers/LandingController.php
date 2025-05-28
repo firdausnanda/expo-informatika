@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Helpers\ResponseFormatter;
+use App\Models\ContactUs;
 use App\Models\Kategori;
 use App\Models\Matakuliah;
 use App\Models\Project;
@@ -271,18 +272,29 @@ class LandingController extends Controller
         return view('pages.landing.contact');
     }
 
-    public function store(Request $request)
+    public function storeContact(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
+            'subject' => 'required|string|max:50',
             'message' => 'required|string'
+        ], [
+            'name.required' => 'Nama harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email tidak valid',
+            'subject.required' => 'Subject harus diisi',
+            'subject.max' => 'Subject maksimal 50 karakter',
+            'message.required' => 'Message harus diisi'
         ]);
 
-        // Here you can add code to handle the form submission
-        // For example, sending an email or storing in database
+        $contactUs = ContactUs::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ]);
 
-        return redirect()->back()->with('success', 'Thank you for your message. We will get back to you soon!');
+        return redirect()->route('contact')->with('success', 'Terimakasih telah mengirim pesan, kami akan segera menghubungi anda');
     }
 }

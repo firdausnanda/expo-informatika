@@ -6,6 +6,24 @@
     <link href="{{ asset('admin/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <style>
+        .profile-btn {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            padding: 0.25rem 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .profile-btn:hover {
+            background: #f1f5f9;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -18,7 +36,8 @@
                     <div class="mb-3 icon-input">
                         <label for="searchKeywords" class="form-label">Kata Kunci Pencarian Proyek</label>
                         <div class="input-group rounded-pill">
-                            <span class="input-group-text bg-white border-end-0 rounded-start-pill @error('search') border-danger @enderror">
+                            <span
+                                class="input-group-text bg-white border-end-0 rounded-start-pill @error('search') border-danger @enderror">
                                 <i class="fa fa-search @error('search') text-danger @enderror"></i>
                             </span>
                             <input type="text" name="search"
@@ -56,7 +75,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                    <button type="submit" class="btn profile-btn w-100">Search</button>
                 </form>
             </div>
         </div>
