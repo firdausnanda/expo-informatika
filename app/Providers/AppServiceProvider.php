@@ -6,6 +6,7 @@ use App\Models\ContactUs;
 use App\Models\Kategori;
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // if (config('app.env') === 'local') {
+        //     URL::forceScheme('https');
+        // }
+
         if (Schema::hasTable('m_matakuliah') && Schema::hasTable('m_kategori') && Schema::hasTable('contact_us')) {
             $matakuliah = Matakuliah::withCount('projects')->orderBy('projects_count', 'desc')->take(5)->get();
             $kategori = Kategori::orderByRaw('RAND()')->take(15)->get();
