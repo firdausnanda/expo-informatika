@@ -15,7 +15,7 @@
 
         <!-- Top 3 Cards -->
         <div class="top-cards" role="list">
-            @foreach ($projects->take(3) as $i)
+            @foreach ($result->take(3) as $i)
                 <!-- 1st -->
                 <article class="card-top" role="listitem" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 2 }}00">
                     <div class="rank">
@@ -37,15 +37,15 @@
                     <div class="stats" aria-label="Alerts, Trades, Average Gain">
                         <div>
                             <div>{{ $i->views_count }}</div>
-                            <div>View</div>
+                            <div><i class="fas fa-eye"></i></div>
                         </div>
                         <div>
                             <div>{{ $i->likers_count }}</div>
-                            <div>Like</div>
+                            <div><i class="fas fa-thumbs-up"></i></div>
                         </div>
                         <div>
-                            <div>{{ \Carbon\Carbon::parse($i->created_at)->isoFormat('D MMMM Y') }}</div>
-                            <div>Created At</div>
+                            <div>{{ \Carbon\Carbon::parse($i->created_at)->isoFormat('D/MM/Y') }}</div>
+                            <div><i class="fas fa-calendar-alt"></i></div>
                         </div>
                     </div>
                     <a href="{{ route('detail', $i->id) }}" class="w-100">
@@ -416,11 +416,14 @@
                 ordering: false,
                 info: false,
                 destroy: true,
+                language: {
+                    emptyTable: "Data tidak ditemukan"
+                },
                 ajax: {
                     url: "{{ route('leaderboard') }}",
                     type: "GET",
-                    data: {
-                        _token: "{{ csrf_token() }}"
+                    data: function(d) {
+                        d.table = true;
                     },
                     dataType: "JSON",
                     dataSrc: function(json) {
@@ -479,6 +482,43 @@
                     }
                 ]
             });
+
+            // Tampilkan loading indicator
+            $('.top-cards').html(
+                '<div class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+
+            $.ajax({
+                url: "{{ route('leaderboard') }}",
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    if (response.meta.code ===
+                        200) {
+                        // Sesuaikan dengan kode success ResponseFormatter
+                        $('.top-cards').html(response.data.html);
+
+                        // Re-init AOS animasi
+                        if (typeof AOS !== 'undefined') {
+                            AOS.refresh();
+                        }
+                    } else {
+                        showError(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    showError(xhr.responseJSON?.message || 'Terjadi kesalahan');
+                }
+            });
+
+            // Show Error
+            function showError(message) {
+                $('.top-cards').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> ${message}
+                    </div>
+                `);
+            }
+
         });
     </script>
 @endsection

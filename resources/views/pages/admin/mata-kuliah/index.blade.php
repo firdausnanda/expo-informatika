@@ -90,14 +90,26 @@
                             <span class="text-danger" id="deskripsi_error"></span>
                         </div>
                         <div class="form-group mb-3">
+                            <label for="status">Status</label>
+                            <div>
+                                <span class="badge bg-success" style="font-size: .8rem; padding: .4em .5em;">
+                                    Aktif
+                                </span>
+                            </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="status" name="status" value="1"
-                                    checked>
-                                <label class="form-check-label" for="status">Aktif</label>
+                                <input class="form-check-input" type="checkbox" id="status" name="status"
+                                    value="1" checked>
                                 <span class="text-danger" id="status_error"></span>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" id="btnSave" class="btn btn-primary">
+                            <span class="text-save">Save</span>
+
+                            <span class="loading d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Loading...
+                            </span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -148,7 +160,14 @@
                                 <label class="form-check-label" for="edit_status">Aktif</label>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" id="btnEdit" class="btn btn-primary">
+                            <span class="text-save">Save</span>
+
+                            <span class="loading d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Loading...
+                            </span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -252,20 +271,48 @@
                 $('#modal-detail').modal('show');
             });
 
+            // Reset Form Invalid
+            $('#modal-tambah').on('show.bs.modal', function() {
+                $('#form-tambah')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
+            });
+
             // Handle Form Submit
             $('#form-tambah').on('submit', function(e) {
                 e.preventDefault();
+
+                let btn = $('#btnSave');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 $.ajax({
                     url: "{{ route('admin.mata-kuliah.store') }}",
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(response) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire('Sukses!', response.meta.message, 'success');
+
                         $('#modal-tambah').modal('hide');
                         $('#table-mata-kuliah').DataTable().ajax.reload();
                         $('#form-tambah')[0].reset();
                     },
                     error: function(xhr) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $.each(xhr.responseJSON.data, function(index, value) {
                             $('#' + index + '_error').text(value);
                         });
@@ -289,25 +336,49 @@
             // Handle Edit Form Submit
             $('#form-edit').on('submit', function(e) {
                 e.preventDefault();
+
+                let btn = $('#btnEdit');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 const id = $('#edit_id').val();
                 $.ajax({
                     url: `{{ route('admin.mata-kuliah.index') }}/${id}`,
                     type: "PUT",
                     data: $(this).serialize(),
                     success: function(response) {
+                        
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire('Sukses!', response.meta.message, 'success');
                         $('#modal-edit').modal('hide');
                         $('#table-mata-kuliah').DataTable().ajax.reload();
                     },
                     error: function(xhr) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire('Error!', xhr.responseJSON.message, 'error');
                     }
                 });
             });
 
             // Handle Delete Button Click
-            $(document).on('click', '.btn-delete', function() {
-                const id = $(this).data('id');
+            $('#table-mata-kuliah').on('click', '.btn-delete', function() {
+
+                let data = $('#table-mata-kuliah').DataTable().row($(this).parents('tr')).data();
+                const id = data.id;
+                
                 if (!id) {
                     Swal.fire('Error!', 'ID tidak valid', 'error');
                     return;
@@ -328,6 +399,19 @@
                             type: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}"
+                            },
+                            beforeSend: function() {
+                                Swal.fire({
+                                    title: 'Mohon tunggu...',
+                                    text: 'Matakuliah sedang dimuat',
+                                    icon: 'warning',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
                             },
                             success: function(response) {
                                 Swal.fire('Sukses!', response.meta.message, 'success');

@@ -428,6 +428,9 @@
                 ordering: false,
                 info: false,
                 destroy: true,
+                language: {
+                    emptyTable: "Data tidak ditemukan"
+                },
                 ajax: {
                     url: "{{ route('leaderboard.monthly') }}",
                     type: "GET",
@@ -568,7 +571,9 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        if (response.meta.code === 200) { // Sesuaikan dengan kode success ResponseFormatter
+                        if (response.meta.code ===
+                            200) { 
+                            // Sesuaikan dengan kode success ResponseFormatter
                             $('.top-cards').html(response.data.html);
 
                             // Update counter jika diperlukan
@@ -582,7 +587,7 @@
                             showError(response.message);
                         }
                     },
-                    error: function(xhr) {                        
+                    error: function(xhr) {
                         showError(xhr.responseJSON?.message || 'Terjadi kesalahan');
                     }
                 });

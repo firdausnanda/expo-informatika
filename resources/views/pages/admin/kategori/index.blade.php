@@ -83,7 +83,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" id="btnSave" class="btn btn-primary">
+                            <span class="text-save">Save</span>
+
+                            <span class="loading d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Loading...
+                            </span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -119,7 +126,14 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" id="btnEdit" class="btn btn-primary">
+                                <span class="text-save">Save</span>
+
+                                <span class="loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                    Loading...
+                                </span>
+                            </button>
                         </div>
                 </form>
             </div>
@@ -135,7 +149,7 @@
     <script>
         $(document).ready(function() {
 
-            //  Init Datatable
+            // Init Datatable
             $('#kategori-table').DataTable({
                 ordering: false,
                 processing: true,
@@ -191,37 +205,51 @@
                 }
             });
 
-            //  Tambah Kategori
+            // Tambah Kategori
             $('#formTambah').submit(function(e) {
                 e.preventDefault();
+
+                let btn = $('#btnSave');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 $.ajax({
                     url: "{{ route('admin.kategori.store') }}",
                     type: "POST",
                     data: $(this).serialize(),
                     dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'Kategori sedang dimuat',
-                            icon: 'warning'
-                        });
-                    },
                     success: function(response) {
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $('#modalTambah').modal('hide');
                         $('#kategori-table').DataTable().ajax.reload();
                         $('#formTambah')[0].reset();
                         Swal.fire({
                             title: 'Berhasil',
-                            text: 'Kategori berhasil ditambahkan',
+                            text: response.meta.message,
                             icon: 'success'
                         });
                     },
                     error: function(xhr, status, error) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire({
                             title: 'Gagal',
                             text: 'Kategori gagal ditambahkan',
                             icon: 'error'
                         });
+
                         $.each(xhr.responseJSON.errors, function(key, value) {
                             $('#formTambah').find(`#${key}`).addClass('is-invalid');
                             $('#formTambah').find(`#${key}`).next('.invalid-feedback')
@@ -229,6 +257,12 @@
                         });
                     }
                 });
+            });
+
+            // Reset Form Invalid
+            $('#modalTambah').on('show.bs.modal', function() {
+                $('#formTambah')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
             });
 
             // Modal Edit Show
@@ -240,9 +274,17 @@
                 $('#modalEdit').modal('show');
             });
 
-            //  Edit Kategori
+            // Edit Kategori
             $('#formEdit').submit(function(e) {
                 e.preventDefault();
+
+                let btn = $('#btnEdit');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
 
                 let link = "{{ route('admin.kategori.update', ':id') }}";
                 link = link.replace(':id', $('#id-edit').val());
@@ -252,14 +294,13 @@
                     type: "PUT",
                     data: $(this).serialize(),
                     dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'Kategori sedang dimuat',
-                            icon: 'warning'
-                        });
-                    },
                     success: function(response) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $('#modalEdit').modal('hide');
                         $('#kategori-table').DataTable().ajax.reload();
                         Swal.fire({
@@ -269,6 +310,12 @@
                         });
                     },
                     error: function(xhr, status, error) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire({
                             title: 'Gagal',
                             text: 'Kategori gagal diubah',
@@ -308,9 +355,15 @@
                             dataType: "JSON",
                             beforeSend: function() {
                                 Swal.fire({
-                                    title: 'Mohon tunggu',
+                                    title: 'Mohon tunggu...',
                                     text: 'Kategori sedang dimuat',
-                                    icon: 'warning'
+                                    icon: 'warning',
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
                                 });
                             },
                             success: function(response) {

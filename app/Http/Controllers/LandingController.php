@@ -116,7 +116,7 @@ class LandingController extends Controller
 
     public function leaderboard(Request $request)
     {
-        $projects = Project::with('mahasiswa', 'gambar', 'matakuliah')
+        $result = Project::with('mahasiswa', 'gambar', 'matakuliah')
             ->where('status', 1)
             ->withCount('likers')
             ->withCount('views')
@@ -125,14 +125,18 @@ class LandingController extends Controller
             ->get();
 
         if ($request->ajax()) {
-            return ResponseFormatter::success(
-                $projects,
-                'Data berhasil diambil'
-            );
+            if ($request->table) {
+                return ResponseFormatter::success($result, 'Data berhasil diambil');
+            }else{
+                return ResponseFormatter::success([
+                    'html' => view('components.top-cards', compact('result'))->render(),
+                    'count' => $result->count()
+                ], 'Data berhasil diambil');
+            }
         }
 
 
-        return view('pages.landing.leaderboard.index', compact('projects'));
+        return view('pages.landing.leaderboard.index', compact('result'));
     }
 
     public function leaderboardMonthly(Request $request)

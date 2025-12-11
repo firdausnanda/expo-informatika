@@ -89,7 +89,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" id="btnSave" class="btn btn-primary">
+                            <span class="text-save">Save</span>
+
+                            <span class="loading d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Loading...
+                            </span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -123,7 +130,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="submit" class="btn btn-primary">Import</button>
+                        <button type="submit" id="btnImport" class="btn btn-primary">
+                            <span class="text-save">Save</span>
+
+                            <span class="loading d-none">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Loading...
+                            </span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -131,8 +145,8 @@
     </div>
 
     <!-- Modal Edit -->
-    <div class="modal fade" id="modalEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-        aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal fade" id="modalEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -171,7 +185,14 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" id="btnEdit" class="btn btn-primary">
+                                <span class="text-save">Save</span>
+
+                                <span class="loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                    Loading...
+                                </span>
+                            </button>
                         </div>
                 </form>
             </div>
@@ -256,23 +277,27 @@
             //  Tambah Kategori
             $('#formTambah').submit(function(e) {
                 e.preventDefault();
+
+                let btn = $('#btnSave');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 $.ajax({
                     url: "{{ route('admin.mahasiswa.store') }}",
                     type: "POST",
                     data: $(this).serialize(),
                     dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'Mahasiswa sedang dimuat',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                            icon: 'warning'
-                        });
-                    },
                     success: function(response) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $('#modalTambah').modal('hide');
                         $('#mahasiswa-table').DataTable().ajax.reload();
                         $('#formTambah')[0].reset();
@@ -283,6 +308,12 @@
                         });
                     },
                     error: function(xhr, status, error) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire({
                             title: 'Gagal',
                             text: 'Mahasiswa gagal ditambahkan',
@@ -295,6 +326,12 @@
                         });
                     }
                 });
+            });
+
+            // Reset Form Invalid
+            $('#modalTambah').on('show.bs.modal', function() {
+                $('#formTambah')[0].reset();
+                $('.is-invalid').removeClass('is-invalid');
             });
 
             // Modal Edit Show
@@ -312,6 +349,14 @@
             $('#formEdit').submit(function(e) {
                 e.preventDefault();
 
+                let btn = $('#btnEdit');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 let link = "{{ route('admin.mahasiswa.update', ':id') }}";
                 link = link.replace(':id', $('#id-edit').val());
 
@@ -320,18 +365,13 @@
                     type: "PUT",
                     data: $(this).serialize(),
                     dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'Mahasiswa sedang dimuat',
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            showCancelButton: false,
-                            showConfirmButton: false,
-                            icon: 'warning'
-                        });
-                    },
                     success: function(response) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $('#modalEdit').modal('hide');
                         $('#mahasiswa-table').DataTable().ajax.reload();
                         Swal.fire({
@@ -341,6 +381,12 @@
                         });
                     },
                     error: function(xhr, status, error) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire({
                             title: 'Gagal',
                             text: 'Mahasiswa gagal diubah',
@@ -380,13 +426,15 @@
                             dataType: "JSON",
                             beforeSend: function() {
                                 Swal.fire({
-                                    title: 'Mohon tunggu',
+                                    title: 'Mohon tunggu...',
                                     text: 'Mahasiswa sedang dimuat',
+                                    icon: 'warning',
+                                    showConfirmButton: false,
                                     allowOutsideClick: false,
                                     allowEscapeKey: false,
-                                    showCancelButton: false,
-                                    showConfirmButton: false,
-                                    icon: 'warning'
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
                                 });
                             },
                             success: function(response) {
@@ -413,8 +461,16 @@
             $('#formImport').submit(function(e) {
                 e.preventDefault();
 
+                let btn = $('#btnImport');
+                let form = $(this);
+
+                // Aktifkan loading
+                btn.prop('disabled', true);
+                btn.find('.text-save').addClass('d-none');
+                btn.find('.loading').removeClass('d-none');
+
                 let formData = new FormData(this);
-                                
+
                 $.ajax({
                     url: "{{ route('admin.mahasiswa.import') }}",
                     type: "POST",
@@ -423,13 +479,13 @@
                     contentType: false,
                     cache: false,
                     dataType: "JSON",
-                    beforeSend: function() {
-                        Swal.fire({
-                            title: 'Mohon tunggu',
-                            text: 'Mahasiswa sedang dimuat',
-                        });
-                    },
                     success: function(response) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         $('#modalImport').modal('hide');
                         $('#mahasiswa-table').DataTable().ajax.reload();
                         Swal.fire({
@@ -439,6 +495,12 @@
                         });
                     },
                     error: function(xhr, status, error) {
+
+                        // Reset button
+                        btn.prop('disabled', false);
+                        btn.find('.text-save').removeClass('d-none');
+                        btn.find('.loading').addClass('d-none');
+
                         Swal.fire({
                             title: 'Gagal',
                             icon: 'error',

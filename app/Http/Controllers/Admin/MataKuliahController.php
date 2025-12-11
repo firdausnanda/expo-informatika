@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\ResponseFormatter;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class MataKuliahController extends Controller
 {
@@ -23,7 +25,12 @@ class MataKuliahController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kode_matakuliah' => 'required|string|max:20|unique:m_matakuliah,kode_matakuliah',
+            'kode_matakuliah' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('m_matakuliah', 'kode_matakuliah')->whereNull('deleted_at'),
+            ],
             'nama_matakuliah' => 'required|string|max:255',
             'sks' => 'required|integer|min:1|max:6',
             'semester' => 'required|integer|min:1|max:14',
@@ -49,16 +56,41 @@ class MataKuliahController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
+            $existing = Matakuliah::withTrashed()
+                ->where('kode_matakuliah', $request->kode_matakuliah)
+                ->first();
+
+            // Jika ada dan merupakan soft delete → restore dan update data
+            if ($existing && $existing->trashed()) {
+                $existing->restore();
+
+                // Update kembali untuk menyesuaikan data terbaru
+                $existing->update([
+                    'nama_matakuliah' => $request->nama_matakuliah,
+                    'sks' => $request->sks,
+                    'semester' => $request->semester,
+                    'deskripsi' => $request->deskripsi,
+                    'status' => true,
+                ]);
+
+                DB::commit();
+                return ResponseFormatter::success(
+                    $existing,
+                    'Data kategori yang sebelumnya terhapus berhasil direstore dan diperbarui.'
+                );
+            }
+
             $data = $request->all();
             $data['status'] = $request->has('status') ? true : false;
-            
+
             Matakuliah::create($data);
-            
+
             DB::commit();
             return ResponseFormatter::success(null, 'Mata kuliah berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e->getMessage());
             return ResponseFormatter::error($e->getMessage(), 'Gagal menambahkan mata kuliah', 500);
         }
     }
@@ -73,7 +105,7 @@ class MataKuliahController extends Controller
         }
     }
 
-    public function edit($id) 
+    public function edit($id)
     {
         try {
             $mataKuliah = Matakuliah::findOrFail($id);
@@ -83,7 +115,7 @@ class MataKuliahController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => false, 
+                'status' => false,
                 'message' => 'Mata kuliah tidak ditemukan'
             ], 404);
         }
@@ -118,13 +150,13 @@ class MataKuliahController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
             $mataKuliah = Matakuliah::findOrFail($id);
             $data = $request->all();
             $data['status'] = $request->has('status') ? true : false;
-            
+
             $mataKuliah->update($data);
-            
+
             DB::commit();
             return ResponseFormatter::success(null, 'Mata kuliah berhasil diperbarui');
         } catch (\Exception $e) {
@@ -137,16 +169,16 @@ class MataKuliahController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             $mataKuliah = Matakuliah::findOrFail($id);
-            
+
             // Check if mata kuliah has related projects
             if ($mataKuliah->projects()->exists()) {
                 return ResponseFormatter::error(null, 'Mata kuliah tidak dapat dihapus karena masih memiliki proyek terkait', 422);
             }
-            
+
             $mataKuliah->delete();
-            
+
             DB::commit();
             return ResponseFormatter::success(null, 'Mata kuliah berhasil dihapus');
         } catch (\Exception $e) {
@@ -154,4 +186,4 @@ class MataKuliahController extends Controller
             return ResponseFormatter::error($e->getMessage(), 'Gagal menghapus mata kuliah', 500);
         }
     }
-} 
+}

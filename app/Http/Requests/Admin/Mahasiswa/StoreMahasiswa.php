@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Mahasiswa;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreMahasiswa extends FormRequest
 {
@@ -23,7 +24,12 @@ class StoreMahasiswa extends FormRequest
     {
         return [
             'nama' => 'required|string|max:255',
-            'nim' => 'required|string|max:255|unique:m_mahasiswa',
+            'nim' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('m_mahasiswa', 'nim')->whereNull('deleted_at'),
+            ],
             'prodi' => 'required|string|max:255',
             'angkatan' => 'required|string|max:255',
         ];

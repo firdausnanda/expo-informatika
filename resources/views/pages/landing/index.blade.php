@@ -8,7 +8,7 @@
             <div class="container section-title mb-4" data-aos="fade-up">
                 <div class="section-title-container d-flex align-items-center justify-content-between">
                     {{-- <h2>Announcement : ISO #1 2025</h2> --}}
-                    <h2>Announcement : #{{ $i['id_tahun_akademik'] }} {{ $i['tahun_akademik'] }} - {{ $i['semester'] }}</h2>
+                    <h3>Announcement : #{{ $i['id_tahun_akademik'] }} {{ $i['tahun_akademik'] }} - {{ $i['semester'] }}</h3>
                 </div>
             </div><!-- End Section Title -->
 
@@ -17,12 +17,12 @@
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <h5 class="text-secondary">
+                            <h6 class="text-secondary">
                                 Matakuliah :
                                 <span class="fw-bold text-dark">
                                     {{ $m['nama_matakuliah'] }}
                                 </span>
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-lg-6 d-flex justify-content-end">
                             <a href="{{ route('more-matakuliah', [$m['id_matakuliah'], $i['id_tahun_akademik']]) }}"

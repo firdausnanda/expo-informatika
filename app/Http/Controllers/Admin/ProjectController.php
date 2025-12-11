@@ -102,7 +102,7 @@ class ProjectController extends Controller
     {
         $kategori = Kategori::get();
         $project = Project::with('kategori', 'gambar', 'tahun_akademik', 'mahasiswa', 'matakuliah')->find($id);
-        $mahasiswa = $project->mahasiswa->map(function($item) {
+        $mahasiswa = $project->mahasiswa->map(function ($item) {
             return [
                 'id' => $item->id,
                 'nama' => $item->nama,

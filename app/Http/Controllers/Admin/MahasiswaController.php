@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\Mahasiswa\UpdateMahasiswa;
 use App\Imports\MahasiswaImport;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -26,14 +27,40 @@ class MahasiswaController extends Controller
     public function store(StoreMahasiswa $request)
     {
         try {
+            DB::beginTransaction();
+            $existing = Mahasiswa::withTrashed()
+                ->where('nim', $request->nim)
+                ->first();
+
+            // Jika ada dan merupakan soft delete → restore dan update data
+            if ($existing && $existing->trashed()) {
+                $existing->restore();
+
+                // Update kembali untuk menyesuaikan data terbaru
+                $existing->update([
+                    'nama' => $request->nama,
+                    'prodi' => $request->prodi,
+                    'angkatan' => $request->angkatan,
+                ]);
+
+                DB::commit();
+                return ResponseFormatter::success(
+                    $existing,
+                    'Data Mahasiswa yang sebelumnya terhapus berhasil direstore dan diperbarui.'
+                );
+            }
+
             Mahasiswa::create([
                 'nama' => $request->nama,
                 'nim' => $request->nim,
                 'prodi' => $request->prodi,
                 'angkatan' => $request->angkatan,
             ]);
+
+            DB::commit();
             return ResponseFormatter::success(null, 'Data mahasiswa berhasil ditambahkan');
         } catch (\Throwable $th) {
+            DB::rollback();
             Log::error($th->getMessage());
             return ResponseFormatter::error($th->getMessage(), 'Data mahasiswa gagal ditambahkan');
         }

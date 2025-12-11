@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\User;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
@@ -25,21 +26,21 @@ class DashboardController extends Controller
         $userweek = User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->orderBy('created_at', 'desc')->count();
 
         // Project & User Precentage
-        $projectprecentage = ($projectweek / $project) * 100;
-        $projectratedprecentage = ($projectliked / $project) * 100;
-        $userprecentage = ($userweek / $user) * 100;
+        $projectprecentage = $project > 0 && $projectweek > 0 ? ($projectweek / $project) * 100 : 0;
+        $projectratedprecentage = $project > 0 && $projectliked > 0 ? ($projectliked / $project) * 100 : 0;
+        $userprecentage = $user > 0 && $userweek > 0 ? ($userweek / $user) * 100 : 0;
 
         // Project Chart
         $months = collect(CarbonPeriod::create(
             now()->subMonths(11)->startOfMonth(),
             '1 month',
             now()->endOfMonth()
-        ))->map(function ($date) {
+        ))->map(function (Carbon $date): array {
             return [
                 'key' => $date->format('Y-m'),
-                'label' => $date->translatedFormat('F Y') // "Januari 2023"
+                'label' => $date->translatedFormat('F Y'),
             ];
-        });
+        });        
 
         $projects = Project::selectRaw("
                 DATE_FORMAT(created_at, '%Y-%m') as month,

@@ -20,25 +20,23 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-3 footer-links">
-                <h4>Matakuliah</h4>
-                <ul>
-                    @forelse ($matakuliah as $m)
-                        <li><a href="{{ route('matakuliah', $m->id) }}">{{ $m->nama_matakuliah }}</a></li>
-                    @empty
-                        <li>none</li>
-                    @endforelse
-                </ul>
-            </div>
-
             <div class="col-lg-5 col-md-3 footer-links">
                 <h4>Kategori</h4>
                 @forelse ($kategori as $k)
                     <a class="btn btn-sm btn-outline-secondary rounded-pill m-2"
                         href="{{ route('kategori', $k->slug) }}">{{ $k->nama }}</a>
                 @empty
-                    <li>none</li>
+                    
                 @endforelse
+            </div>
+
+            <div class="col-lg-3 col-md-3 footer-links">
+                <h4>Tautan</h4>
+                <ul>
+                    <li><a href="https://informatika.itsk-soepraoen.ac.id/" target="_blank">Prodi Informatika ITSK Soepraoen</a></li>
+                    <li><a href="https://jesica.itsk-soepraoen.ac.id/" target="_blank">JESICA</a></li>
+                    <li><a href="https://itsk-soepraoen.ac.id/" target="_blank">ITSK RS dr.Soepraoen</a></li>
+                </ul>
             </div>
         </div>
     </div>
