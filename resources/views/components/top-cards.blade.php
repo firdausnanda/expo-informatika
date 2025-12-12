@@ -20,15 +20,15 @@
             <div class="stats" aria-label="Alerts, Trades, Average Gain">
                 <div>
                     <div>{{ $i->views_count }}</div>
-                    <div>View</div>
+                    <div><i class="fas fa-eye"></i></div>
                 </div>
                 <div>
                     <div>{{ $i->likers_count }}</div>
-                    <div>Like</div>
+                    <div><i class="fas fa-thumbs-up"></i></div>
                 </div>
                 <div>
-                    <div>{{ \Carbon\Carbon::parse($i->created_at)->isoFormat('D MMMM Y') }}</div>
-                    <div>Created At</div>
+                    <div>{{ \Carbon\Carbon::parse($i->created_at)->isoFormat('D/MM/Y') }}</div>
+                    <div><i class="fas fa-calendar-alt"></i></div>
                 </div>
             </div>
             <a href="{{ route('detail', $i->id) }}" class="w-100">

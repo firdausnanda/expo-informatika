@@ -50,14 +50,23 @@
                                             @if ($p['likes'] == false)
                                                 <button class="btn btn-sm btn-outline-secondary rounded-pill btn-like"
                                                     data-project-id="{{ $p['id'] }}">
-                                                    <i class="bi bi-hand-thumbs-up"></i> Like
+                                                    <span class="like-text">
+                                                        <i class="bi bi-hand-thumbs-up"></i> Like
+                                                    </span>
+                                                    <span class="spinner-border spinner-border-sm ms-2 d-none"
+                                                        role="status"></span>
                                                 </button>
                                             @else
                                                 <button class="btn btn-sm btn-danger rounded-pill btn-like"
                                                     data-project-id="{{ $p['id'] }}">
-                                                    <i class="bi bi-hand-thumbs-up-fill"></i> Liked
+                                                    <span class="like-text">
+                                                        <i class="bi bi-hand-thumbs-up-fill"></i> Liked
+                                                    </span>
+                                                    <span class="spinner-border spinner-border-sm ms-2 d-none"
+                                                        role="status"></span>
                                                 </button>
                                             @endif
+
                                             <a href="{{ route('detail', $p['id']) }}"
                                                 class="btn btn-sm btn-link text-decoration-none">
                                                 Detail <i class="bi bi-chevron-right"></i>
@@ -95,64 +104,77 @@
     <script>
         $(document).ready(function() {
             $('.btn-like').click(function() {
+
+                let btn = $(this);
+                let projectId = btn.data('project-id');
+
+                let text = btn.find('.like-text');
+                let spinner = btn.find('.spinner-border');
+
+                // disable tombol + tampilkan spinner
+                btn.prop('disabled', true);
+                spinner.removeClass('d-none');
+                text.addClass('opacity-50').text('Memproses...');
+
                 @if (Auth::check())
-                    Swal.fire({
-                        title: 'Anda menyukai proyek ini?',
-                        text: 'Data anda akan disimpan',
-                        icon: 'question',
-                        confirmButtonText: '<i class="bi bi-hand-thumbs-up"></i> Suka',
-                        confirmButtonColor: '#dc3545',
-                        showCancelButton: true,
-                        cancelButtonText: 'Batal',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: "{{ route('user.like') }}",
-                                type: "POST",
-                                data: {
-                                    id: $(this).data('project-id'),
-                                },
-                                beforeSend: function() {
-                                    $(this).html(
-                                        '<i class="bi bi-hand-thumbs-up-fill"></i> Loading...'
-                                    );
-                                },
-                                success: function(response) {
-                                    if (response.data.liked) {
-                                        var button = $(
-                                            'button[data-project-id="' +
-                                            response
-                                            .data.project.id + '"]');
-                                        button.html(
-                                            '<i class="bi bi-hand-thumbs-up-fill"></i> Liked'
-                                        );
-                                        button.removeClass(
-                                                'btn-outline-secondary')
-                                            .addClass(
-                                                'btn-danger');
-                                        button.attr('data-liked', 'true');
-                                    } else {
-                                        var button = $(
-                                            'button[data-project-id="' +
-                                            response
-                                            .data.project.id + '"]');
-                                        button.html(
-                                            '<i class="bi bi-hand-thumbs-up"></i> Like'
-                                        );
-                                        button.removeClass(
-                                                'btn-danger')
-                                            .addClass(
-                                                'btn-outline-secondary');
-                                        button.attr('data-liked', 'false');
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    Swal.fire({
-                                        title: 'Oops...!',
-                                        text: 'Proyek gagal disukai',
-                                        icon: 'error',
-                                    });
+                    $.ajax({
+                        url: "{{ route('user.like') }}",
+                        type: "POST",
+                        data: {
+                            id: $(this).data('project-id'),
+                        },
+                        success: function(response) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1800,
+                                timerProgressBar: true,
+                                padding: '10px 16px',
+                                customClass: {
+                                    popup: 'custom-toast',
+                                    title: 'custom-toast-title',
+                                    icon: 'custom-toast-icon',
+                                    timerProgressBar: 'custom-progress-bar'
                                 }
+                            });
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.data.liked ? 'Berhasil Like!' :
+                                    'Berhasil Un-Like!'
+                            });
+
+
+                            // UPDATE BUTTON (gunakan struktur tombol yang aman)
+                            let button = $('button[data-project-id="' + response.data.project
+                                .id + '"]');
+                            let text = button.find('.like-text');
+                            let spinner = button.find('.spinner-border');
+
+                            // Sembunyikan spinner & aktifkan tombol kembali
+                            spinner.addClass('d-none');
+                            button.prop('disabled', false);
+                            text.removeClass('opacity-50');
+
+                            // PERBARUI UI SESUAI STATUS
+                            if (response.data.liked) {
+                                button.removeClass('btn-outline-secondary').addClass(
+                                    'btn-danger');
+                                text.html('<i class="bi bi-hand-thumbs-up-fill"></i> Liked');
+                                button.attr('data-liked', 'true');
+                            } else {
+                                button.removeClass('btn-danger').addClass(
+                                    'btn-outline-secondary');
+                                text.html('<i class="bi bi-hand-thumbs-up"></i> Like');
+                                button.attr('data-liked', 'false');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Oops...!',
+                                text: 'Proyek gagal disukai',
+                                icon: 'error',
                             });
                         }
                     });
