@@ -126,7 +126,14 @@
 
                                 <ul>
                                     @foreach ($project->mahasiswa as $m)
-                                        <li>{{ $m->nama }}</li>
+                                        <li class="mb-2">
+                                            <div style="line-height: 1.1;">
+                                                {{ $m->nama }} <br>
+                                                <span class="text-muted" style="font-size: .8em">
+                                                    NIM. {{ $m->nim }}
+                                                </span>
+                                            </div>
+                                        </li>
                                     @endforeach
                                 </ul>
 
