@@ -2,7 +2,7 @@
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
         <a href="{{ route('index') }}" class="logo d-flex align-items-center me-auto me-xl-0">
-            <h1 class="sitename">Informatic Show Off</h1>
+            <h1 class="sitename">ISO Informatika Soepraoen</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
