@@ -4,8 +4,8 @@
             <div class="rank">
                 {{ $loop->iteration }}<sup>{{ $loop->iteration == 1 ? 'st' : ($loop->iteration == 2 ? 'nd' : ($loop->iteration == 3 ? 'rd' : 'th')) }}</sup>
             </div>
-            <img src="https://storage.googleapis.com/a1aa/image/b42174d2-c232-4d8d-3b70-1d145844d4dc.jpg"
-                alt="Avatar of Roger Korsgaard with green face and spiky hair" class="avatar" />
+            <img src="{{ $loop->iteration == 1 ? asset('landing/img/leaderboard/1.png') : ($loop->iteration == 2 ? asset('landing/img/leaderboard/2.png') : asset('landing/img/leaderboard/3.png')) }}"
+                alt="avatar {{ $loop->iteration }}" class="avatar" />
             <div class="score-badge"><i class="fas fa-heart"></i> {{ $i->likers_count }} Like</div>
             <h3>
                 {{ Str::limit($i->nama, 20) }}

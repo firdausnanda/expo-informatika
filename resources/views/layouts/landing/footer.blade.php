@@ -13,10 +13,11 @@
                     <p><strong>Email:</strong> <span>Informatika@itsk-soepraoen.ac.id</span></p>
                 </div>
                 <div class="social-links d-flex mt-4">
-                    <a href=""><i class="bi bi-twitter-x"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.threads.com/@informatikasoepraoen" target="_blank"><i class="bi bi-threads"></i></a>
+                    <a href="https://www.tiktok.com/@informatikasoepraoen" target="_blank"><i class="bi bi-tiktok"></i></a>
+                    <a href="https://www.instagram.com/informatikasoepraoen" target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="https://id.linkedin.com/in/informatika-itsk-soepraoen-879436286" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@InformatikaSoepraoen" target="_blank"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
 
@@ -42,7 +43,7 @@
     </div>
 
     <div class="container copyright text-center mt-4">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">ITSK Soepraoen</strong> <span>All Rights
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">2026 ITSK Soepraoen</strong> <span>All Rights
                 Reserved</span>
         </p>
     </div>
