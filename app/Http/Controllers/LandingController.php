@@ -6,6 +6,7 @@ use App\Enums\RoleEnum;
 use App\Helpers\ResponseFormatter;
 use App\Models\ContactUs;
 use App\Models\Kategori;
+use App\Models\Mahasiswa;
 use App\Models\Matakuliah;
 use App\Models\Project;
 use App\Models\TahunAkademik;
@@ -268,7 +269,9 @@ class LandingController extends Controller
 
     public function about()
     {
-        return view('pages.landing.about');
+        $student = Mahasiswa::count();
+        $project = Project::count();
+        return view('pages.landing.about', compact('student', 'project'));
     }
 
     public function contact()

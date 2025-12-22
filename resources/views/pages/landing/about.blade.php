@@ -1,59 +1,63 @@
 @extends('layouts.landing.main')
 
 @section('content')
-<div class="container py-5">
-    <!-- Background text -->
-    <h1 class="bg-text" aria-hidden="true">About Us</h1>
+    <div class="container py-5">
+        <!-- Background text -->
+        <h1 class="bg-text" aria-hidden="true">About Us</h1>
 
-    <!-- Hero Section -->
-    <div class="row align-items-center mb-5" data-aos="fade-up">
-        <div class="col-lg-6">
-            <h2 class="display-4 fw-bold mb-4">We're Building the Future of Education</h2>
-            <p class="lead text-muted mb-4">Our platform connects students, educators, and institutions to create a more engaging and effective learning experience.</p>
-            <div class="d-flex gap-3">
-                <div class="stat-item">
-                    <h3 class="fw-bold text-primary mb-0">500+</h3>
-                    <p class="text-muted mb-0">Active Students</p>
+        <!-- Hero Section -->
+        <div class="row align-items-center mb-5" data-aos="fade-up">
+            <div class="col-lg-6">
+                <h2 class="display-4 fw-bold mb-4">Where Code Meets Creativity</h2>
+                <p class="lead text-muted mb-4">A Showcase of Academic Excellence in Informatics ITSK Soepraoen.</p>
+                <div class="d-flex gap-3">
+                    <div class="stat-item">
+                        <h3 class="fw-bold text-primary mb-0">{{ $student }}</h3>
+                        <p class="text-muted mb-0">Active Students</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="fw-bold text-primary mb-0">{{ $project }}</h3>
+                        <p class="text-muted mb-0">Projects</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="fw-bold text-primary mb-0">95%</h3>
+                        <p class="text-muted mb-0">Satisfaction</p>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <h3 class="fw-bold text-primary mb-0">50+</h3>
-                    <p class="text-muted mb-0">Projects</p>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ asset('landing/img/hero-1.jpg') }}" alt="Students collaborating"
+                    class="img-fluid rounded-3 shadow">
+            </div>
+        </div>
+
+        <!-- Mission & Vision -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6" data-aos="fade-right">
+                <div class="mission-card">
+                    <div class="icon-wrapper mb-4">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="mb-3">Our Mission</h3>
+                    <p class="text-muted">Menjadi platform terdepan dalam mendokumentasikan, memamerkan, dan menginspirasi
+                        pengembangan solusi teknologi berbasis pembelajaran akademik, serta memperkuat identitas kompetensi
+                        mahasiswa informatika melalui karya nyata yang berdampak.</p>
                 </div>
-                <div class="stat-item">
-                    <h3 class="fw-bold text-primary mb-0">95%</h3>
-                    <p class="text-muted mb-0">Satisfaction</p>
+            </div>
+            <div class="col-md-6" data-aos="fade-left">
+                <div class="vision-card">
+                    <div class="icon-wrapper mb-4">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="mb-3">Our Vision</h3>
+                    <p class="text-muted">Memotivasi mahasiswa untuk menghasilkan karya berkualitas tinggi dengan standar
+                        industri, melalui apresiasi publik, umpan balik terbuka, dan pengakuan institusional.</p>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <img src="{{ asset('landing/img/hero-1.jpg') }}" alt="Students collaborating" class="img-fluid rounded-3 shadow">
-        </div>
-    </div>
 
-    <!-- Mission & Vision -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-6" data-aos="fade-right">
-            <div class="mission-card">
-                <div class="icon-wrapper mb-4">
-                    <i class="fas fa-bullseye"></i>
-                </div>
-                <h3 class="mb-3">Our Mission</h3>
-                <p class="text-muted">To empower students and educators with innovative tools and resources that enhance the learning experience and foster academic excellence.</p>
-            </div>
-        </div>
-        <div class="col-md-6" data-aos="fade-left">
-            <div class="vision-card">
-                <div class="icon-wrapper mb-4">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <h3 class="mb-3">Our Vision</h3>
-                <p class="text-muted">To be the leading platform that transforms education through technology, making quality learning accessible to everyone.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Team Section -->
-    {{-- <div class="team-section mb-5">
+        <!-- Team Section -->
+        {{-- <div class="team-section mb-5">
         <h2 class="text-center mb-5" data-aos="fade-up">Meet Our Team</h2>
         <div class="row g-4">
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
@@ -101,173 +105,174 @@
         </div>
     </div> --}}
 
-    <!-- Values Section -->
-    <div class="values-section">
-        <h2 class="text-center mb-5" data-aos="fade-up">Our Core Values</h2>
-        <div class="row g-4">
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
-                <div class="value-card">
-                    <div class="icon-wrapper mb-3">
-                        <i class="fas fa-lightbulb"></i>
+        <!-- Values Section -->
+        <div class="values-section">
+            <h2 class="text-center mb-5" data-aos="fade-up">Our Core Values</h2>
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="value-card">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>Show Off</h4>
+                        <p class="text-muted mb-0">Mendokumentasikan dan Memamerkan</p>
                     </div>
-                    <h4>Innovation</h4>
-                    <p class="text-muted mb-0">Constantly pushing boundaries to improve education</p>
                 </div>
-            </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
-                <div class="value-card">
-                    <div class="icon-wrapper mb-3">
-                        <i class="fas fa-users"></i>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="value-card">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Collaboration</h4>
+                        <p class="text-muted mb-0">Memperkuat Kolaborasi dan Relevansi</p>
                     </div>
-                    <h4>Collaboration</h4>
-                    <p class="text-muted mb-0">Working together to achieve common goals</p>
                 </div>
-            </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
-                <div class="value-card">
-                    <div class="icon-wrapper mb-3">
-                        <i class="fas fa-graduation-cap"></i>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="value-card">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>Creativity</h4>
+                        <p class="text-muted mb-0">Mendorong Budaya Berkarya</p>
                     </div>
-                    <h4>Excellence</h4>
-                    <p class="text-muted mb-0">Striving for the highest quality in everything we do</p>
                 </div>
-            </div>
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
-                <div class="value-card">
-                    <div class="icon-wrapper mb-3">
-                        <i class="fas fa-heart"></i>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="value-card">
+                        <div class="icon-wrapper mb-3">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>Good Trace</h4>
+                        <p class="text-muted mb-0">Membangun Jejak Digital Kompetensi</p>
                     </div>
-                    <h4>Passion</h4>
-                    <p class="text-muted mb-0">Loving what we do and making a difference</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('styles')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-<style>
-    .bg-text {
-        font-weight: 800;
-        font-size: 6rem;
-        color: #d1d5db;
-        opacity: 0.2;
-        user-select: none;
-        position: absolute;
-        top: 110px;
-        left: 50%;
-        transform: translateX(-50%);
-        pointer-events: none;
-        font-feature-settings: 'liga' off;
-        display: none;
-        white-space: nowrap;
-        z-index: 0;
-    }
-
-    @media (min-width: 576px) {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
         .bg-text {
-            display: block;
+            font-weight: 800;
+            font-size: 6rem;
+            color: #d1d5db;
+            opacity: 0.2;
+            user-select: none;
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            font-feature-settings: 'liga' off;
+            display: none;
+            white-space: nowrap;
+            z-index: 0;
         }
-    }
 
-    .stat-item {
-        padding: 1rem;
-        background: #f8fafc;
-        border-radius: 0.5rem;
-        text-align: center;
-        min-width: 120px;
-    }
+        @media (min-width: 576px) {
+            .bg-text {
+                display: block;
+            }
+        }
 
-    .mission-card, .vision-card {
-        background: white;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
-        height: 100%;
-    }
+        .stat-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            text-align: center;
+            min-width: 120px;
+        }
 
-    .icon-wrapper {
-        width: 48px;
-        height: 48px;
-        background: #f8fafc;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #2563eb;
-        font-size: 1.25rem;
-    }
+        .mission-card,
+        .vision-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+            height: 100%;
+        }
 
-    .team-card {
-        background: white;
-        border-radius: 1rem;
-        overflow: hidden;
-        box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
-        transition: transform 0.2s ease;
-    }
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 1.25rem;
+        }
 
-    .team-card:hover {
-        transform: translateY(-5px);
-    }
+        .team-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s ease;
+        }
 
-    .team-img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-    }
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .team-info {
-        padding: 1.5rem;
-        text-align: center;
-    }
+        .team-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
 
-    .social-links {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-    }
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
 
-    .social-link {
-        width: 32px;
-        height: 32px;
-        background: #f8fafc;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #2563eb;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
+        .social-links {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
 
-    .social-link:hover {
-        background: #2563eb;
-        color: white;
-    }
+        .social-link {
+            width: 32px;
+            height: 32px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
 
-    .value-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
-        text-align: center;
-        height: 100%;
-        transition: transform 0.2s ease;
-    }
+        .social-link:hover {
+            background: #2563eb;
+            color: white;
+        }
 
-    .value-card:hover {
-        transform: translateY(-5px);
-    }
+        .value-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+            text-align: center;
+            height: 100%;
+            transition: transform 0.2s ease;
+        }
 
-    .value-card h4 {
-        margin-bottom: 0.5rem;
-        color: #1e293b;
-    }
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .value-card p {
-        font-size: 0.9rem;
-    }
-</style>
-@endpush 
+        .value-card h4 {
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+
+        .value-card p {
+            font-size: 0.9rem;
+        }
+    </style>
+@endpush
