@@ -26,7 +26,7 @@
                                 <h5 class="card-title text-truncate" title="{{ $p->nama }}">{{ $p->nama }}
                                 </h5>
                                 <div class="card-text mb-2 flex-grow-1">
-                                    <p class="text-muted line-clamp-3">{{ $p->deskripsi }}</p>
+                                    <p class="text-muted line-clamp-3">{!! $p->deskripsi !!}</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     @if (Auth::check() && $p->isLikedBy($user))
