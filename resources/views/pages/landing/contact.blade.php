@@ -13,15 +13,17 @@
                     <p class="text-muted mb-4">Feel free to contact us for any questions or inquiries. We'll get back to you
                         as soon as possible.</p>
 
-                    <div class="info-item mb-4">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="info-content">
-                            <h5>Our Location</h5>
-                            <p class="mb-0">Jl. Majapahit No.1 Kiduldalem
-                                Klojen, Kota Malang</p>
-                        </div>
+                    <div class="social-medias mb-4">
+                        <a class="social-media" href="https://www.threads.com/@informatikasoepraoen" target="_blank"><i
+                                class="bi bi-threads"></i></a>
+                        <a class="social-media" href="https://www.tiktok.com/@informatikasoepraoen" target="_blank"><i
+                                class="bi bi-tiktok"></i></a>
+                        <a class="social-media" href="https://www.instagram.com/informatikasoepraoen" target="_blank"><i
+                                class="bi bi-instagram"></i></a>
+                        <a class="social-media" href="https://id.linkedin.com/in/informatika-itsk-soepraoen-879436286"
+                            target="_blank"><i class="bi bi-linkedin"></i></a>
+                        <a class="social-media" href="https://www.youtube.com/@InformatikaSoepraoen" target="_blank"><i
+                                class="bi bi-youtube"></i></a>
                     </div>
 
                     <div class="info-item mb-4">
@@ -34,12 +36,40 @@
                         </div>
                     </div>
 
-                    <div class="social-links mt-4">
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="info-item mt-4">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <p class="mb-0">Jl. Majapahit No.1 Kiduldalem
+                                Klojen, Kota Malang</p>
+                        </div>
                     </div>
+
+                    <div class="mt-3">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.1959009289744!2d112.632874!3d-7.978693300000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6290031cb0253%3A0x759b8a3f310bdde5!2sKampus%203%20Institut%20Teknologi%20Sains%20dan%20Kesehatan%20(ITSK)%20dr.%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369597039!5m2!1sid!2sid"
+                            width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
+                    </div>
+
+                    <div class="info-item mt-5">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <p class="mb-0">Jl. S. Supriadi No. 22 Sukun Kec. Sukun Kota Malang</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d493.8898609639926!2d112.6187658!3d-7.986657!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7883ccfc982d91%3A0x3c8c9717aac59aa8!2sProgram%20Studi%20Sarjana%20Informatika%20ITSK%20RS%20dr%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369637957!5m2!1sid!2sid"
+                            width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
+                    </div>
+
+
                 </div>
             </div>
 
@@ -57,8 +87,10 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name" class="form-label">Your Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name">
+                                    <label for="name" class="form-label">Your Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        id="name" name="name">
                                     @error('name')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -66,8 +98,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email" class="form-label">Your Email <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email">
+                                    <label for="email" class="form-label">Your Email <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email">
                                     @error('email')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -75,8 +109,10 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('subject') is-invalid @enderror" id="subject" name="subject">
+                                    <label for="subject" class="form-label">Subject <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('subject') is-invalid @enderror"
+                                        id="subject" name="subject">
                                     @error('subject')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -84,7 +120,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                                    <label for="message" class="form-label">Message <span
+                                            class="text-danger">*</span></label>
                                     <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5"></textarea>
                                     @error('message')
                                         <span class="invalid-feedback">{{ $message }}</span>
@@ -92,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Send Message</button>
+                                <button type="submit" class="btn btn-outline-secondary">Send Message</button>
                             </div>
                         </div>
                     </form>
@@ -165,12 +202,13 @@
             font-size: 0.9rem;
         }
 
-        .social-links {
+        .social-medias {
             display: flex;
-            gap: 1rem;
+            gap: .5rem;
+            justify-content: center;
         }
 
-        .social-link {
+        .social-media {
             width: 36px;
             height: 36px;
             background: #f8fafc;
@@ -183,7 +221,7 @@
             transition: all 0.2s ease;
         }
 
-        .social-link:hover {
+        .social-media:hover {
             background: #2563eb;
             color: white;
         }
