@@ -20,7 +20,7 @@
                         <p class="text-muted mb-0">Projects</p>
                     </div>
                     <div class="stat-item">
-                        <h3 class="fw-bold text-primary mb-0">95%</h3>
+                        <h3 class="fw-bold text-primary mb-0">97%</h3>
                         <p class="text-muted mb-0">Satisfaction</p>
                     </div>
                 </div>
