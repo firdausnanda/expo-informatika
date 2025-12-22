@@ -4,9 +4,9 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>{{ env('APP_NAME') ?? 'Techno Expo' }}</title>
+    <title>{{ env('APP_NAME') ?? 'Informatic Showoff - ITSK Soepraoen' }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Admin Dashboard | {{ env('APP_NAME') ?? 'Techno Expo' }}" name="description" />
+    <meta content="Admin Dashboard | {{ env('APP_NAME') ?? 'Informatic Showoff - ITSK Soepraoen' }}" name="description" />
     <meta content="Firdaus Nanda" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

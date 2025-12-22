@@ -186,7 +186,8 @@
                     className: 'text-center',
                     width: '10%',
                     render: function(data, type, row, meta) {
-                        return `<button class="btn btn-sm btn-primary btn-detail"><i class="fas fa-eye"></i></button>`;
+                        return `<button class="btn btn-sm btn-primary btn-detail"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-danger btn-hapus"><i class="fas fa-trash"></i></button>`;
                     }
                 }],
                 initComplete: function() {
@@ -240,6 +241,60 @@
                 });
 
                 $('#modalId').modal('show');
+            });
+
+            //  Hapus Contact Us
+            $('#contact-us-table').on('click', '.btn-hapus', function() {
+                let data = $('#contact-us-table').DataTable().row($(this).parents('tr')).data();
+
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: 'Data akan dihapus',
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('admin.contact-us.destroy', ['contact_u' => ':id']) }}".replace(
+                                ':id', data
+                                .id),
+                            dataType: "JSON",
+                            beforeSend: function() {
+                                Swal.fire({
+                                    title: 'Loading...',
+                                    text: 'Please wait while we are processing your request',
+                                    allowOutsideClick: false,
+                                    showConfirmButton: false,
+                                    showCancelButton: false,
+                                });
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    title: 'Data has been deleted',
+                                    icon: 'success',
+                                    allowOutsideClick: false,
+                                    showConfirmButton: false,
+                                    showCancelButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                });
+        
+                                table.ajax.reload()
+                            },
+                            error: function(response) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Data has been deleted',
+                                });
+                            }
+                        });                        
+                    }
+                });
+
             });
 
             //  Reload Datatable

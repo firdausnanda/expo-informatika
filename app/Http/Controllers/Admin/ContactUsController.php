@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ContactUs;
+use Illuminate\Support\Facades\Log;
 
 class ContactUsController extends Controller
 {
@@ -30,5 +31,17 @@ class ContactUsController extends Controller
                 ->withCookie($cookieName, true, 60 * 24);
         }
         return ResponseFormatter::success($data, 'Data Contact Us');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $contact = ContactUs::find($id);
+            $contact->delete();
+            return ResponseFormatter::success('Data berhasil dihapus', 'Data berhasil dihapus');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return ResponseFormatter::error($th->getMessage(), 'Data tidak boleh kosong', 400);
+        }
     }
 }
