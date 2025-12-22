@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Informatic Showoff - ITSK Soepraoen</title>
+    <title>{{ env('APP_NAME') ?? 'ISO Informatika Soepraoen' }}</title>
     <meta name="author" content="Firdaus Nanda">
-    <meta name="description" content="Techno Expo">
-    <meta name="keywords" content="Techno Expo">
+    <meta name="description" content="{{ env('APP_NAME') ?? 'ISO Informatika Soepraoen' }}">
+    <meta name="keywords" content="{{ env('APP_NAME') ?? 'ISO Informatika Soepraoen' }}">
     <meta name="robots" content="INDEX,FOLLOW">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
