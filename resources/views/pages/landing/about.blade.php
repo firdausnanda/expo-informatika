@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+        </div> --}}
 
         <!-- Values Section -->
         <div class="values-section">
@@ -130,7 +130,7 @@
                 <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
                     <div class="value-card">
                         <div class="icon-wrapper mb-3">
-                            <i class="fas fa-graduation-cap"></i>
+                            <i class="fas fa-brain"></i>
                         </div>
                         <h4>Creativity</h4>
                         <p class="text-muted mb-0">Mendorong Budaya Berkarya</p>
@@ -139,7 +139,7 @@
                 <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
                     <div class="value-card">
                         <div class="icon-wrapper mb-3">
-                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-map-pin"></i>
                         </div>
                         <h4>Good Trace</h4>
                         <p class="text-muted mb-0">Membangun Jejak Digital Kompetensi</p>
