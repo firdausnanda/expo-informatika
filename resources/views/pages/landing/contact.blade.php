@@ -5,10 +5,10 @@
         <!-- Background text -->
         <h1 class="bg-text" aria-hidden="true">Contact</h1>
 
-        <div class="row g-4">
+        <div class="row g-4 align-items-start">
             <!-- Contact Information -->
             <div class="col-lg-4">
-                <div class="contact-info" data-aos="fade-right">
+                <div class="contact-info mb-3" data-aos="fade-right">
                     <h2 class="mb-4">Get in Touch</h2>
                     <p class="text-muted mb-4">Feel free to contact us for any questions or inquiries. We'll get back to you
                         as soon as possible.</p>
@@ -36,6 +36,10 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="contact-info" data-aos="fade-right">
+                    <h2 class="mb-4">Locations</h2>
                     <div class="info-item mt-4">
                         <div class="icon-wrapper">
                             <i class="fas fa-map-marker-alt"></i>
@@ -68,7 +72,6 @@
                             width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
                     </div>
-
 
                 </div>
             </div>
@@ -134,6 +137,10 @@
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <div class="col-lg-4">
+
             </div>
         </div>
     </div>
