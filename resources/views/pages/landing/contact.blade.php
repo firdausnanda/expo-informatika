@@ -37,43 +37,6 @@
                     </div>
 
                 </div>
-
-                <div class="contact-info" data-aos="fade-right">
-                    <h2 class="mb-4">Locations</h2>
-                    <div class="info-item mt-4">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="info-content">
-                            <p class="mb-0">Jl. Majapahit No.1 Kiduldalem
-                                Klojen, Kota Malang</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.1959009289744!2d112.632874!3d-7.978693300000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6290031cb0253%3A0x759b8a3f310bdde5!2sKampus%203%20Institut%20Teknologi%20Sains%20dan%20Kesehatan%20(ITSK)%20dr.%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369597039!5m2!1sid!2sid"
-                            width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
-                    </div>
-
-                    <div class="info-item mt-5">
-                        <div class="icon-wrapper">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="info-content">
-                            <p class="mb-0">Jl. S. Supriadi No. 22 Sukun Kec. Sukun Kota Malang</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d493.8898609639926!2d112.6187658!3d-7.986657!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7883ccfc982d91%3A0x3c8c9717aac59aa8!2sProgram%20Studi%20Sarjana%20Informatika%20ITSK%20RS%20dr%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369637957!5m2!1sid!2sid"
-                            width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
-                    </div>
-
-                </div>
             </div>
 
             <!-- Contact Form -->
@@ -139,8 +102,51 @@
                 </div>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-8">
+                <div class="contact-info" data-aos="fade-right">
+                    <h2 class="mb-4">Locations</h2>
 
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="info-item">
+                                <div class="icon-wrapper">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <p class="mb-0">Jl. Majapahit No.1 Kiduldalem
+                                        Kec. Klojen, Kota Malang</p>
+                                </div>
+                            </div>
+        
+                            <div class="mt-3">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.1959009289744!2d112.632874!3d-7.978693300000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6290031cb0253%3A0x759b8a3f310bdde5!2sKampus%203%20Institut%20Teknologi%20Sains%20dan%20Kesehatan%20(ITSK)%20dr.%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369597039!5m2!1sid!2sid"
+                                    width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="info-item">
+                                <div class="icon-wrapper">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <p class="mb-0">Jl. S. Supriadi No. 22 Sukun Kec. Sukun Kota Malang</p>
+                                </div>
+                            </div>
+        
+                            <div class="mt-3">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d493.8898609639926!2d112.6187658!3d-7.986657!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7883ccfc982d91%3A0x3c8c9717aac59aa8!2sProgram%20Studi%20Sarjana%20Informatika%20ITSK%20RS%20dr%20Soepraoen!5e0!3m2!1sid!2sid!4v1766369637957!5m2!1sid!2sid"
+                                    width="600" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade" class="w-100"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
         </div>
     </div>
